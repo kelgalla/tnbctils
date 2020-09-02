@@ -1,0 +1,8 @@
+/N/u/kelgalla/Karst/brca/brcatcga/dataReorg/maf/TCGA.BRCA.muse.6fcfff20-4993-4789-b27b-69d165130466.DR-6.0.somatic.maf.gz
+/N/u/kelgalla/Karst/brca/brcatcga/dataReorg/maf/TCGA.BRCA.muse.d565f30b-d3bb-4739-b26c-be8d43c596d4.DR-6.0.protected.maf.gz
+/N/u/kelgalla/Karst/brca/brcatcga/dataReorg/maf/TCGA.BRCA.mutect.96983226-d92a-449d-8890-e1b210cee0fe.DR-6.0.somatic.maf.gz
+/N/u/kelgalla/Karst/brca/brcatcga/dataReorg/maf/TCGA.BRCA.varscan.b007289f-f7f0-4199-82f7-69ddd56b13f1.DR-6.0.protected.maf.gz
+/N/u/kelgalla/Karst/brca/brcatcga/dataReorg/maf/TCGA.BRCA.somaticsniper.8855730e-21ad-4711-9be2-b58bc337834e.DR-6.0.somatic.maf.gz
+/N/u/kelgalla/Karst/brca/brcatcga/dataReorg/maf/TCGA.BRCA.mutect.71f2cbda-32f4-481f-ad7e-faa0e1b5bc53.DR-6.0.protected.maf.gz
+/N/u/kelgalla/Karst/brca/brcatcga/dataReorg/maf/TCGA.BRCA.varscan.053e3955-5fbd-46d3-8a21-c3cde48ef9b4.DR-6.0.somatic.maf.gz
+/N/u/kelgalla/Karst/brca/brcatcga/dataReorg/maf/TCGA.BRCA.somaticsniper.489ce525-6eb7-45e5-8acd-11fc1f5bc4ea.DR-6.0.protected.maf.gz

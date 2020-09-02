@@ -1,0 +1,316 @@
+#/usr/bin/env perl
+
+#---------------------------------------------------------------------
+# FILE     : ANALYSISShare.pm
+# AUTHOR   : Kelly E. Craven
+# CREATED  : 2013-10-17
+# COMMENTS : Helper subroutines
+#---------------------------------------------------------------------
+package ANALYSIS::ANALYSISShare;
+
+use strict;
+use warnings;
+
+use Exporter;
+our @ISA = qw(Exporter);
+our @EXPORT = qw(uuidToBarcode uuidSampleType getBiotab getFields uuidToData);
+
+use LWP::UserAgent;
+use Getopt::Std;
+use XML::XPath;
+use XML::LibXML;
+use JSON;
+use URI::Escape;
+$ENV{PERL_LWP_SSL_VERIFY_HOSTNAME}=0;
+
+# our ($opt_i);
+
+# my $usage .= "This script takes a file with a list of UUIDs and queries the TCGA web service for the corresponding barcodes\n\n";
+# $usage .= "perl getBarcode.pl -i uuidFile\n\n";
+# $usage .= "perl getBarcode.pl -i \"\"\n\n";
+
+# $usage .= "-i uuidFile\n";
+
+# getopts("i:") or die $usage;
+
+# if (!$opt_i) { die "-i is required\n$usage"; }
+
+#---------------------------------------------------------------------
+# sub uuidToBarcode
+# From an array of UUIDs, query the barcodes from the TCGA web service
+#---------------------------------------------------------------------
+sub uuidToBarcode {
+    my $uuidList = shift;
+
+    my $json = {
+	"filters" => {
+	    "op" => "in",
+	    "content" => {
+		"field" => "file_id",
+		"value" => $uuidList
+	    }},
+	"format" => "JSON",
+	"fields" => "cases.submitter_id",
+	"size" => "100",
+	"pretty" => "true"
+    };
+
+    $json = encode_json($json);
+    #print($json . "\n\n");
+
+#my $json = '{"filters":{"op":"in","content":{"field":"file_id","value":[' . $uuidContent . ']}},';
+#$json .= '"format":"JSON",';
+#$json .= '"fields":"cases.submitter_id",';
+#$json .= '"pretty":"true"}';
+#print($json . "\n\n");
+
+#$json = uri_escape($json);
+#print($json . "\n\n");
+#my $url = "https://api.gdc.cancer.gov/legacy/files?filters=" . $json . "&fields=cases.submitter_id&pretty=true";
+#print($url . "\n\n");
+
+    my $cmd = "curl --request POST --header \"Content-Type: application/json\" --data '$json' 'https://api.gdc.cancer.gov/files' 2> /dev/null";
+    #print($cmd . "\n\n");
+    my $resjson = qx/$cmd/;
+    #print($resjson . "\n\n");
+    
+    my $res = decode_json($resjson);
+    my $hits = $res->{"data"}->{"hits"}; # array ref
+
+    # try non-legacy database first, if no hit, then legacy
+    if (@{$hits} == 0){
+	$cmd = "curl --request POST --header \"Content-Type: application/json\" --data '$json' 'https://api.gdc.cancer.gov/legacy/files' 2> /dev/null";
+	$resjson = qx/$cmd/;
+#print($resjson . "\n\n");
+	
+	$res = decode_json($resjson);
+	$hits = $res->{"data"}->{"hits"}; # array ref
+    }
+
+    my %result; # (uuid => barcode)
+    foreach my $hit (@{$hits}){
+	my $id = $hit->{"id"};
+	my $barcode = $hit->{"cases"}->[0]->{"submitter_id"};
+	#print($id . "\t" . $barcode . "\n");
+	$result{$id} = $barcode;
+    }
+    
+    return \%result;
+}
+
+#---------------------------------------------------------------------
+# sub uuidSampleType
+# From an array of UUIDs, query the sample type from the TCGA web service
+#---------------------------------------------------------------------
+sub uuidSampleType {
+    my $uuidList = shift;
+
+    my $json = {
+	"filters" => {
+	    "op" => "in",
+	    "content" => {
+		"field" => "file_id",
+		"value" => $uuidList
+	    }},
+	"format" => "JSON",
+	"fields" => "cases.samples.sample_type",
+	"size" => "100",
+	"pretty" => "true"
+    };
+
+    $json = encode_json($json);
+    #print($json . "\n\n");
+
+    my $cmd = "curl --request POST --header \"Content-Type: application/json\" --data '$json' 'https://api.gdc.cancer.gov/files' 2> /dev/null";
+    #print($cmd . "\n\n");
+    my $resjson = qx/$cmd/;
+    #print($resjson . "\n\n");
+    
+    my $res = decode_json($resjson);
+    my $hits = $res->{"data"}->{"hits"}; # array ref
+
+    # try non-legacy database first, if no hit, then legacy
+    if (@{$hits} == 0){
+	$cmd = "curl --request POST --header \"Content-Type: application/json\" --data '$json' 'https://api.gdc.cancer.gov/legacy/files' 2> /dev/null";
+	$resjson = qx/$cmd/;
+#print($resjson . "\n\n");
+	
+	$res = decode_json($resjson);
+	$hits = $res->{"data"}->{"hits"}; # array ref
+    }
+
+    my %result; # (uuid => barcode)
+    foreach my $hit (@{$hits}){
+	my $id = $hit->{"id"};
+	my $type = $hit->{"cases"}->[0]->{"samples"}->[0]->{"sample_type"};
+	#print($id . "\t" . $barcode . "\n");
+	$result{$id} = $type;
+    }
+    
+    return \%result;
+}
+
+#---------------------------------------------------------------------
+# sub uuidToData
+# From an array of UUIDs, query the data from the TCGA web service
+#---------------------------------------------------------------------
+sub uuidToData {
+    my $uuidList = shift;
+    my $legacy = shift;
+
+    my $json = {
+	"filters" => {
+	    "op" => "in",
+	    "content" => {
+		"field" => "file_id",
+		"value" => $uuidList
+	    }},
+	"format" => "JSON",
+	"size" => "100",
+	"pretty" => "true"
+    };
+
+    $json = encode_json($json);
+#    print($json . "\n\n");
+
+    my $cmd;
+    if ($legacy){
+	$cmd = "curl --request POST --header \"Content-Type: application/json\" --data '$json' 'https://api.gdc.cancer.gov/legacy/files' 2> /dev/null";
+    } else {
+	$cmd = "curl --request POST --header \"Content-Type: application/json\" --data '$json' 'https://api.gdc.cancer.gov/files' 2> /dev/null";
+    }
+#    print($cmd . "\n\n");
+    my $resjson = qx/$cmd/;
+    print($resjson . "\n\n");
+
+#    my $res = decode_json($resjson);
+#    my $hits = $res->{"data"}->{"hits"}; # array ref
+
+#    my %result; # (uuid => barcode)
+#    foreach my $hit (@{$hits}){
+#	my $id = $hit->{"id"};
+#	my $barcode = $hit->{"cases"}->[0]->{"submitter_id"};
+	#print($id . "\t" . $barcode . "\n");
+#	$result{$id} = $barcode;
+#    }
+    
+#    return \%result;
+}
+
+sub barcodeToUUID {
+    my $barcodeList = shift;
+
+    my $barcodeContent = join(",", @{$barcodeList});
+    
+    my $agent = LWP::UserAgent->new();
+    push(@{$agent->requests_redirectable}, 'POST');
+    
+    my $response = $agent->post("https://tcga-data.nci.nih.gov/uuid/uuidws/mapping/xml/barcode/batch", Content_Type => 'text/plain', Content => $barcodeContent);
+    
+    if ($response->is_success) {
+	my $xmlReader = XML::XPath->new(xml => $response->decoded_content);
+	my %result; # (barcode => uuid)
+	
+	my @barcodeMapping = $xmlReader->findnodes("/uuidBarcodeMappings/uuidMapping");
+	
+	foreach my $barcodeMapping (@barcodeMapping){
+	    my ($barcodeNode) = $xmlReader->findnodes("barcode", $barcodeMapping);
+	    my $barcode = $xmlReader->getNodeText($barcodeNode);
+	    my ($uuidNode) = $xmlReader->findnodes("uuid", $barcodeMapping);
+	    my $uuid = $xmlReader->getNodeText($uuidNode);
+	
+	    $result{$barcode} = $uuid;
+	}
+	
+	return \%result;
+    } else {
+	die $response->status_line;
+    }
+}
+
+#---------------------------------------------------------------------
+# sub getBiotab
+# From an xml file, isolate the relevant biotab information
+#---------------------------------------------------------------------
+sub getBiotab {
+    my $xml = shift;
+    
+    my %biotab;
+
+    my $xmlReader = XML::XPath->new(xml => $xml);
+
+    my $bcr_patient_uuid = $xmlReader->findvalue("/brca:tcga_bcr/brca:patient/shared:bcr_patient_uuid");
+    $biotab{"bcr_patient_uuid"} = $bcr_patient_uuid;
+
+    my $bcr_patient_barcode = $xmlReader->findvalue("/brca:tcga_bcr/brca:patient/shared:bcr_patient_barcode");
+    $biotab{"bcr_patient_barcode"} = $bcr_patient_barcode;
+
+    my $breast_carcinoma_estrogen_receptor_status = $xmlReader->findvalue("/brca:tcga_bcr/brca:patient/brca_shared:breast_carcinoma_estrogen_receptor_status");
+    $biotab{"breast_carcinoma_estrogen_receptor_status"} = $breast_carcinoma_estrogen_receptor_status;
+
+    my $er_level_cell_percentage_category = $xmlReader->findvalue("/brca:tcga_bcr/brca:patient/brca_shared:er_level_cell_percentage_category");
+    $biotab{"er_level_cell_percentage_category"} = $er_level_cell_percentage_category;
+
+    my $breast_carcinoma_progesterone_receptor_status = $xmlReader->findvalue("/brca:tcga_bcr/brca:patient/brca_shared:breast_carcinoma_progesterone_receptor_status");
+    $biotab{"breast_carcinoma_progesterone_receptor_status"} = $breast_carcinoma_progesterone_receptor_status;
+
+    my $progesterone_receptor_level_cell_percent_category = $xmlReader->findvalue("/brca:tcga_bcr/brca:patient/brca_shared:progesterone_receptor_level_cell_percent_category");
+    $biotab{"progesterone_receptor_level_cell_percent_category"} = $progesterone_receptor_level_cell_percent_category;
+
+    my $lab_proc_her2_neu_immunohistochemistry_receptor_status = $xmlReader->findvalue("/brca:tcga_bcr/brca:patient/brca_shared:lab_proc_her2_neu_immunohistochemistry_receptor_status");
+    $biotab{"lab_proc_her2_neu_immunohistochemistry_receptor_status"} = $lab_proc_her2_neu_immunohistochemistry_receptor_status;
+
+    my $her2_erbb_pos_finding_cell_percent_category = $xmlReader->findvalue("/brca:tcga_bcr/brca:patient/brca_shared:her2_erbb_pos_finding_cell_percent_category");
+    $biotab{"her2_erbb_pos_finding_cell_percent_category"} = $her2_erbb_pos_finding_cell_percent_category;
+
+    my $her2_immunohistochemistry_level_result = $xmlReader->findvalue("/brca:tcga_bcr/brca:patient/brca_shared:her2_immunohistochemistry_level_result");
+    $biotab{"her2_immunohistochemistry_level_result"} = $her2_immunohistochemistry_level_result;
+
+    my $lab_procedure_her2_neu_in_situ_hybrid_outcome_type = $xmlReader->findvalue("/brca:tcga_bcr/brca:patient/brca_shared:lab_procedure_her2_neu_in_situ_hybrid_outcome_type");
+    $biotab{"lab_procedure_her2_neu_in_situ_hybrid_outcome_type"} = $lab_procedure_her2_neu_in_situ_hybrid_outcome_type;
+
+    return \%biotab;
+}
+
+# given an xml string and an array of values to look up, place them in a hash
+sub getFields {
+    my $xml = shift;
+    my $tag = shift;
+    my $fields = shift;
+    
+    my %biotab;
+
+    my $xmlReader = XML::LibXML->load_xml(string => $xml);
+
+    foreach my $field (@{$fields}){
+
+	my @nodes = $xmlReader->findnodes(qq{/*[local-name()="tcga_bcr"]/$tag/*[local-name()="$field"]});
+	my @val =  map { $_->to_literal() } @nodes;
+	my $val = join(" | ", @val); 
+
+	$biotab{$field} = $val;
+    }
+
+    return \%biotab;
+}
+
+
+#my @uuid = ("bfd9f7ad-f6bd-42dd-9687-dca1a605d35f","ffe640d4-b79e-44d1-ab76-481bd2620561");
+#my @uuid = ("bfd9f7ad-f6bd-42dd-9687-dca1a605d35f");
+#my @uuid = ("e0d36cc0-652c-4224-bb10-09d15c7bd8f1");
+#my @uuid = ("a7519980-7225-4e6e-b0d3-cbbd7a61afda","a76a8a5d-b85e-4494-9cf6-d6be34d3fdb9");
+#my $res1 = &uuidToBarcode(\@uuid);
+#foreach my $uuid (keys %{$res1}){
+#    my $barcode = $res1->{$uuid};
+#    print($uuid . "\t" . $barcode . "\n");
+#}
+
+#my @barcode = ("TCGA-HZ-7923", "TCGA-IB-7897");
+#my @barcode = ("TCGA-HZ-7923-01A-12R-2156-07", "TCGA-IB-7897-01A-21R-2204-07");
+#my $res2 = &barcodeToUUID(\@barcode);
+#foreach my $barcode (keys %{$res2}){
+#    my $uuid = $res2->{$barcode};
+#    print($barcode . "\t" . $uuid . "\n");
+#}
+
+1;

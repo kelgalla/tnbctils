@@ -1,0 +1,13 @@
+61558cd1-34a6-4f5b-9397-0cf59de8302d	TCGA-E2-A158	Solid Tissue Normal skipped
+96b893d3-3920-4ea1-8379-897ed2a37576	TCGA-BH-A1F6	Solid Tissue Normal skipped
+0e562e2a-e4a4-4cdc-a0d9-369f0f8acf5e	TCGA-GI-A2C9	Solid Tissue Normal skipped
+9f4ee50a-b368-4adb-ad78-487d1bdfeb6c	TCGA-E2-A1LH	Solid Tissue Normal skipped
+e2b4b820-010e-4927-bac9-1bc3edc74993	TCGA-BH-A1EW	Solid Tissue Normal skipped
+9ee8c9c1-9874-4ba7-870c-e86699ce6837	TCGA-E2-A1LS	Solid Tissue Normal skipped
+a4549401-ecce-4b94-9da4-63b18ec51195	TCGA-BH-A0BW	Solid Tissue Normal skipped
+9a3ae407-9082-4b1e-8b2a-df926c4cd49f	TCGA-BH-A18V	Solid Tissue Normal skipped
+c44c6153-e2dc-4d88-95c6-d3c9f84e1be8	TCGA-BH-A18V	Metastatic skipped
+fdc50d53-7c78-4920-aadb-9224cb14d95b	TCGA-BH-A0B3	Solid Tissue Normal skipped
+3f63f4cf-6c5c-4ea3-a850-d39720b1ee7e	TCGA-A7-A0CE	Solid Tissue Normal skipped
+1077d4f2-d1be-4810-8e5b-d5aea29efcc3	TCGA-BH-A0E0	Solid Tissue Normal skipped
+717114f1-a2ca-47ea-a7fb-997fca7dfc82	TCGA-E2-A1L7	Solid Tissue Normal skipped

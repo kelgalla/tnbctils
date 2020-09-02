@@ -1,0 +1,2 @@
+Hugo_Symbol	num	cases	freq	highNum	highCases	highFreq	lowNum	lowCases	lowFreq	pval
+GOLGB1	9	127	7.08661417322835	1	63	1.58730158730159	8	63	12.6984126984127	0.0325097643975954

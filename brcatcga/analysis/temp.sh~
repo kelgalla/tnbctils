@@ -1,0 +1,4 @@
+#!/bin/bash
+
+curl 'https://api.gdc.cancer.gov/legacy/files/bfd9f7ad-f6bd-42dd-9687-dca1a605d35f?pretty-true'
+

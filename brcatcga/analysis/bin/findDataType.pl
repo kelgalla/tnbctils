@@ -1,0 +1,198 @@
+#/usr/bin/env perl
+#---------------------------------------------------------------------
+# FILE     : findDataType.pl
+# AUTHOR   : Kelly E. Craven
+# CREATED  : 2017-05-19
+# COMMENTS : takes the uuid directories created by gdc-client and 
+#            organizes them into data type directories
+#---------------------------------------------------------------------
+
+use strict;
+use warnings;
+
+use File::Copy;
+
+use FindBin qw($Bin);
+use lib "$Bin/..";
+use ANALYSIS::ANALYSISShare qw(uuidToBarcode uuidSampleType);
+
+# normal
+my $dataDir = "/N/u/kelgalla/Karst/brca/brcatcga/data";
+my $dataReorgDir = "/N/u/kelgalla/Karst/brca/brcatcga/dataReorg";
+my $legacy = 0;
+
+# htseq
+#my $dataTypeString = "htseq.counts";
+#my $dataTypeDir = "htseq";
+#my $fileSuffix = "gz";
+
+# FPKM
+#my $dataTypeString = "FPKM.txt";
+#my $dataTypeDir = "fpkm";
+#my $fileSuffix = "gz";
+
+# FPKM-UQ
+#my $dataTypeString = "FPKM-UQ.txt";
+#my $dataTypeDir = "fpkm-uq";
+#my $fileSuffix = "gz";
+
+# vcf
+my $dataTypeString = "vcf";
+my $dataTypeDir = "vcf";
+my $fileSuffix = "gz";
+
+# bcrXML
+#my $dataTypeString = "clinical.*\.xml";
+#my $dataTypeDir = "bcrXML";
+#my $fileSuffix = "xml";
+
+# biospecimen
+#my $dataTypeString = "biospecimen.*\.xml";
+#my $dataTypeDir = "biospecimen";
+#my $fileSuffix = "xml";
+
+# maf
+#my $dataTypeString = "maf";
+#my $dataTypeDir = "maf";
+#my $fileSuffix = "gz";
+
+# legacy
+#my $dataDir = "/N/u/kelgalla/Karst/brca/brcatcga/dataLegacy";
+#my $dataReorgDir = "/N/u/kelgalla/Karst/brca/brcatcga/dataLegacyReorg";
+#my $legacy = 1;
+
+# svs
+#my $dataTypeString = "svs";
+#my $dataTypeDir = "svs";
+#my $fileSuffix = "svs";
+
+# biotab
+#my $dataTypeString = "clinical.*?\.txt";
+#my $dataTypeDir = "biotab";
+#my $fileSuffix = "txt";
+
+# clinSupp
+#my $dataTypeString = "omf.*\.xml";
+#my $dataTypeDir = "clinSupp";
+#my $fileSuffix = "xml";
+
+# pdf
+#my $dataTypeString = "pdf";
+#my $dataTypeDir = "pdf";
+#my $fileSuffix = "pdf";
+
+my %save;
+
+# get list of uuids
+my @uuid;
+opendir(LEG, $dataDir) or die("opendir() failed: $!");
+while(defined(my $file = readdir(LEG))){
+    if($file eq "." || $file eq ".."){next;}
+    push(@uuid, $file);
+}
+closedir(LEG);
+
+# look up associated TCGA barcode
+my %uuidToBarcode;
+my %uuidSampleType;
+#my @iterateUUID =  @uuid[0..99];
+my @iterateUUID = @uuid;
+while (my @uuid100 = splice(@iterateUUID, 0, 99)){
+#    my $list = join(", ", @uuid100);
+#    print($list . "\n");
+    %uuidToBarcode = (%uuidToBarcode, %{&uuidToBarcode(\@uuid100, $legacy)});
+    %uuidSampleType = (%uuidSampleType, %{&uuidSampleType(\@uuid100, $legacy)});
+#    foreach my $uuid (@uuid100){
+#	my $barcode = $uuidToBarcode{$uuid};
+#	print($uuid . "\t" . ($barcode ? $barcode :  "") . "\n");
+#    }   
+}
+
+
+my %fileCount;
+foreach my $uuid (@uuid){
+    my $uuidDir = $dataDir . "/" . $uuid;
+    opendir(LEGUUID, $uuidDir) or die("opendir() failed: $!");
+    while(defined(my $file = readdir(LEGUUID))){
+	if($file eq "." || $file eq ".."){next;}
+	if ($file =~ $dataTypeString){
+	    $fileCount{$file}++;
+	    $save{$uuid} = $file;
+	}	
+    }
+    closedir(LEGUUID);
+}
+
+my %fileCountCopy = %fileCount;
+
+my $allUniq;
+my $howManyEqualOne = grep {$_ == 1} values %fileCount;
+if ($howManyEqualOne == scalar values %fileCount){
+    $allUniq = 1;
+} else{
+    $allUniq = 0;
+}
+
+foreach my $saveUUID (keys %save){
+    my $file = $save{$saveUUID};
+    $file =~ /^(.*)\.$fileSuffix$/;
+
+    my $append = "";
+    unless ($allUniq){
+	if ($fileCount{$file} > 1){
+	    $append = "." . $fileCountCopy{$file} . "of" . $fileCount{$file};
+	    $fileCountCopy{$file}--;
+	} #else {
+	  #  $append = ".1of1";
+	#}
+    }
+    my $newFile = $1 . $append . "." . $fileSuffix;
+
+    if (grep { $_ eq $dataTypeString} ("htseq.counts", "FPKM.txt", "FPKM-UQ.txt", "vcf")){
+	$newFile =~ s/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/$saveUUID/;
+	$newFile = $uuidToBarcode{$saveUUID} . "." . $newFile;
+    }
+
+    if (grep { $_ eq $dataTypeString} ("svs")){
+	$newFile =~ m/(TCGA-[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4})/;
+	unless ($1 eq $uuidToBarcode{$saveUUID}){
+	    my $bcode = $uuidToBarcode{$saveUUID};
+	    die("Barcodes do not match\nFile barcode: $1, UUID barcode: $bcode");
+	}
+	my $sampleType = $uuidSampleType{$saveUUID};
+	$sampleType =~ s/ /_/g;
+	$newFile =~ s/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/$sampleType.$saveUUID/;
+    }
+
+    if (grep { $_ eq $dataTypeString} ("pdf")){
+	$newFile =~ m/(TCGA-[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4})/;
+	unless ($1 eq $uuidToBarcode{$saveUUID}){
+	    my $bcode = $uuidToBarcode{$saveUUID};
+	    die("Barcodes do not match\nFile barcode: $1, UUID barcode: $bcode");
+	}
+	$newFile =~ s/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/$saveUUID/;
+    }
+
+    if (grep { $_ =~ $dataTypeString} ("clinical.*?\.txt")){
+	$newFile =~ s/\.$fileSuffix/\.$saveUUID\.$fileSuffix/;
+    }
+
+    if (grep { $_ =~ $dataTypeString} ("maf")){
+	$newFile =~ s/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/$saveUUID/;
+    }
+
+    if (grep { $_ =~ $dataTypeString} ("omf.*\.xml", "clinical.*\.xml", "biospecimen.*\.xml")){
+	$newFile =~ m/(TCGA-[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4})/;
+	unless ($1 eq $uuidToBarcode{$saveUUID}){
+	    my $bcode = $uuidToBarcode{$saveUUID};
+	    die("Barcodes do not match\nFile barcode: $1, UUID barcode: $bcode");
+	}
+	$newFile =~ s/\.$fileSuffix/\.$saveUUID\.$fileSuffix/;
+    }
+
+    my $path = $dataDir . "/" . $saveUUID . "/" . $file;
+    my $newPath = $dataReorgDir . "/" . $dataTypeDir . "/" . $newFile;
+    print($newPath . "\n");
+    copy($path, $newPath) or die "Copy failed: $!";
+}
+

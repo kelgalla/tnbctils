@@ -1,0 +1,31 @@
+#/usr/bin/env perl
+#---------------------------------------------------------------------
+# FILE     : barcodeFromMAF.pl
+# AUTHOR   : Kelly E. Craven
+# CREATED  : 2018-02-18
+# COMMENTS : isolate the unique barcodes from the maf file
+#---------------------------------------------------------------------
+
+use strict;
+use warnings;
+
+#use FindBin qw($Bin);
+#use lib "$Bin/..";
+#use ANALYSIS::ANALYSISShare qw(getBiotab);
+
+# maf file location
+my $mafFile = "/N/u/kelgalla/Karst/brca/brcatcga/dataReorg/maf/TCGA.BRCA.muse.d565f30b-d3bb-4739-b26c-be8d43c596d4.DR-6.0.protected.maf";
+
+my %barcode;
+open(MAF, "<$mafFile") or die("Couldn't open '$mafFile' for reading: ($!)\n");
+my @header = split("\t", $header);
+my %indices = map { $header[$_], $_} (0..$#header);
+
+while (my $line = <MAF>){
+    chomp($line);
+    my @values = split("\t", $line);
+
+    my $fullbcode = $value[$indices{"Tumor_Seq_Allele1"}];
+}
+
+close(MAF);

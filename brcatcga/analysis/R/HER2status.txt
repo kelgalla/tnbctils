@@ -1,0 +1,12 @@
+lab_proc_her2_neu_immunohistochemistry_receptor_status	her2_immunohistochemistry_level_result	lab_procedure_her2_neu_in_situ_hybrid_outcome_type
+Negative	1+	
+Negative		
+Equivocal		Negative
+Negative	0	
+Equivocal	2+	Negative
+		Negative
+Negative	0	Negative
+Negative		Negative
+Equivocal	1+	Negative
+Negative	1+	Negative
+Indeterminate		Negative

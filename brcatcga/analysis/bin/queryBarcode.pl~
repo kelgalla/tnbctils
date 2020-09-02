@@ -1,0 +1,103 @@
+#/usr/bin/env perl
+#---------------------------------------------------------------------
+# FILE     : queryBarcode.pl
+# AUTHOR   : Kelly E. Craven
+# CREATED  : 2017-08-17
+# COMMENTS : takes the uuid directories created by gdc-client and 
+#            queries information about the uuids to be saved in a 
+#            summary file
+#---------------------------------------------------------------------
+
+use strict;
+use warnings;
+
+use File::Copy;
+
+use FindBin qw($Bin);
+use lib "$Bin/..";
+use ANALYSIS::ANALYSISShare qw(uuidToBarcode uuidSampleType);
+
+# normal
+my $dataDir = "/N/u/kelgalla/Karst/brca/data";
+my $legacy = 0;
+
+# legacy
+#my $dataDir = "/N/u/kelgalla/Karst/brca/dataLegacy";
+#my $legacy = 1;
+
+my %save;
+
+# get list of uuids
+my @uuid;
+opendir(LEG, $dataDir) or die("opendir() failed: $!");
+while(defined(my $file = readdir(LEG))){
+    if($file eq "." || $file eq ".."){next;}
+    push(@uuid, $file);
+}
+closedir(LEG);
+
+# look up associated TCGA barcode
+my %uuidToBarcode;
+my %uuidSampleType;
+#my @iterateUUID =  @uuid[0..99];
+my @iterateUUID = @uuid;
+while (my @uuid100 = splice(@iterateUUID, 0, 99)){
+#    my $list = join(", ", @uuid100);
+#    print($list . "\n");
+    %uuidToBarcode = (%uuidToBarcode, %{&uuidToBarcode(\@uuid100, $legacy)});
+    %uuidSampleType = (%uuidSampleType, %{&uuidSampleType(\@uuid100, $legacy)});
+
+    foreach my $uuid (@uuid100){
+	my $barcode = $uuidToBarcode{$uuid};
+	my $sampleType = $uuidSampleType{$uuid};
+	print($uuid . "\t" . ($barcode ? $barcode :  "") . "\t" . ($sampleType ? $sampleType : "") . "\n");
+    }   
+}
+
+
+# my %fileCount;
+# foreach my $uuid (@uuid){
+#     my $uuidDir = $dataDir . "/" . $uuid;
+#     opendir(LEGUUID, $uuidDir) or die("opendir() failed: $!");
+#     while(defined(my $file = readdir(LEGUUID))){
+# 	if($file eq "." || $file eq ".."){next;}
+# 	if ($file =~ $dataTypeString){
+# 	    $fileCount{$file}++;
+# 	    $save{$uuid} = $file;
+# 	}	
+#     }
+#     closedir(LEGUUID);
+# }
+# my %fileCountCopy = %fileCount;
+
+# my $allUniq;
+# my $howManyEqualOne = grep {$_ == 1} values %fileCount;
+# if ($howManyEqualOne == scalar values %fileCount){
+#     $allUniq = 1;
+# } else{
+#     $allUniq = 0;
+# }
+
+# foreach my $saveUUID (keys %save){
+#     my $file = $save{$saveUUID};
+#     $file =~ /^(.*)\.$fileSuffix$/;
+#     my $append = "";
+#     unless ($allUniq){
+# 	if ($fileCount{$file} > 1){
+# 	    $append = "." . $fileCountCopy{$file} . "of" . $fileCount{$file};
+# 	    $fileCountCopy{$file}--;
+# 	} else {
+# 	    $append = ".1of1";
+# 	}
+#     }
+#     my $newFile = $1 . $append . "." . $fileSuffix;
+#     if (grep { $_ eq $dataTypeString} ("htseq.counts", "FPKM.txt", "FPKM-UQ.txt")){
+# 	$newFile = $uuidToBarcode{$saveUUID} . "." . $newFile;
+#     }
+
+#     my $path = $dataDir . "/" . $saveUUID . "/" . $file;
+#     my $newPath = $dataReorgDir . "/" . $dataTypeDir . "/" . $newFile;
+#     print($newPath . "\n");
+#     copy($path, $newPath) or die "Copy failed: $!";
+# }
+

@@ -1,0 +1,27 @@
+queryBarcode.pl
+-will take the list of uuids in data or dataLegacy and look up barcodes and sample types
+
+-run findDataType.pl to move files from data or dataLegacy to dataReorg or dataLegacyReorg
+
+-run createBiotab.pl to create a biotab file in the bin directory
+
+-run biotabTNBC.R to isolate the TNBC cases and write the file to tnbc.txt in the R directory
+
+-run isolateTNBC.pl to just save the files associated with the 157 TNBC cases
+
+-manually combined the tils info from badve to create tnbc.tils.txt in the R directory
+
+-run extractInfo.pl to append additional information on the tnbc.tils.txt file
+input R/tnbc.tils.txt, output R/tnbc.tils.append.txt
+
+-run condenseSurv.pl to calculate the OS and DFS
+input R/tnbc.tils.append.txt, output R/tnbc.tils.append.surv.txt
+
+-run finalTNBCList.R to isolate only the infiltrating ductal carcinoma cases
+input R/tnbc.tils.append.surv.txt, output R/tnbc.tils.append.surv.idc.txt
+
+-run combineSamples.pl to create a gene expression file of the tnbc cases for cibersort
+input R/tnbc.tils.append.surv.idc.txt, output bin/tnbcGeneExp.$dataType.txt
+
+
+

@@ -1,0 +1,108 @@
+#/usr/bin/env perl
+#---------------------------------------------------------------------
+# FILE     : combineSamples.pl
+# AUTHOR   : Kelly E. Craven
+# CREATED  : 2017-08-17
+# COMMENTS : read the TNBC gene expression files and combine the data
+#            into one single file
+#---------------------------------------------------------------------
+
+use strict;
+use warnings;
+
+use FindBin qw($Bin);
+use lib "$Bin/..";
+use ANALYSIS::ANALYSISShare qw(uuidToBarcode uuidSampleType);
+
+# final tnbc list
+my $tnbcList = "/N/u/kelgalla/Karst/brca/analysis/R/tnbc.tils.append.surv.idc.txt";
+
+# tnbc
+my $tnbcDir = "/N/u/kelgalla/Karst/brca/tnbc";
+
+# output
+my $out = "/N/u/kelgalla/Karst/brca/analysis/bin";
+
+# htseq
+#my $dataTypeDir = "htseq";
+
+# fpkm
+#my $dataTypeDir = "fpkm";
+
+# fpkm-uq
+my $dataTypeDir = "fpkm-uq";
+
+# get the list of cases
+my @barcode;
+open(IN, "<$tnbcList") or die("Couldn't open '$tnbcList' for reading: ($!)\n");	
+my $head = <IN>;
+my @head = split("\t", $head);
+chomp(@head);
+my %indices = map { $head[$_], $_} (0..$#head);
+
+while (my $line = <IN>){
+    my @values = split("\t", $line);
+    chomp(@values);
+
+    my $bcode = $values[$indices{"bcr_patient_barcode"}];
+    push(@barcode, $bcode);
+}
+close(FILE);
+
+# get the list of files
+my @files;
+opendir(TNBC, "$tnbcDir/$dataTypeDir") or die("opendir() failed: $!");
+while(defined(my $file = readdir(TNBC))){
+    if($file eq "." || $file eq ".."){next;}
+    push(@files, $file);
+}
+closedir(TNBC);
+
+my @header;
+my %data;
+my %barcode;
+# loop through each case
+foreach my $file (@files){
+    $file =~ m/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})/;
+    my $uuid = $1;
+    $file =~ m/(TCGA-[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4})/;
+    my $bcode = $1;
+    next unless grep {$_ eq $bcode} @barcode;
+
+    $barcode{$bcode} = 1;
+
+    my $uuidSampleType = &uuidSampleType([$uuid], 0);
+    my $sampleType = $uuidSampleType->{$uuid};
+    if ($sampleType eq "Primary Tumor"){
+	push(@header, "$bcode");
+	open(FILE, "<$tnbcDir/$dataTypeDir/$file") or die("Couldn't open '$file' for reading: ($!)\n");	
+	while (my $line = <FILE>){
+	    chomp($line);
+	    my @values = split("\t", $line);
+	    if (defined($data{$values[0]})){
+		push(@{$data{$values[0]}}, $values[1]);
+	    } else {
+		$data{$values[0]} = [$values[1]];
+	    }
+	}
+	close(FILE);
+    } else {
+	print("$uuid\t$bcode\t$sampleType skipped\n");
+    }
+}
+
+my $bcodeN = keys %barcode;
+my $colN = @header;
+#print("barcodeN: $bcodeN, colN: $colN\n");
+
+# write data to file
+open(OUT, ">$out/tnbcGeneExp.$dataTypeDir.txt") or die("Couldn't open '$out/tnbcGeneExp.txt' for writing: ($!)\n");
+my $header = join("\t", @header);
+print(OUT "ensembl_gene_id\t", $header, "\n");
+
+foreach my $egi (keys %data){
+    my @values = @{$data{$egi}};
+    my $line = join("\t", @values);
+    print(OUT "$egi\t$line", "\n");
+}
+close(OUT);

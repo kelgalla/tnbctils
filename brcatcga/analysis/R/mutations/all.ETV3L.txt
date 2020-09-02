@@ -1,0 +1,4 @@
+Hugo_Symbol	Sample_ID	Protein_Change
+ETV3L	TCGA-AO-A0J6	p.Y28*
+ETV3L	TCGA-AO-A128	p.H2Q
+ETV3L	TCGA-EW-A3U0	p.R55S

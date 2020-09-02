@@ -1,0 +1,9 @@
+/N/u/kelgalla/Karst/brca/dataLegacyReorg/biotab/nationwidechildrens.org_clinical_follow_up_v2.1_brca.870a360c-d0e8-44ba-9359-29d79c84d3c9.txt
+/N/u/kelgalla/Karst/brca/dataLegacyReorg/biotab/nationwidechildrens.org_clinical_omf_v4.0_brca.f768b04a-ad54-4601-8a37-433a6ea7e3b2.txt
+/N/u/kelgalla/Karst/brca/dataLegacyReorg/biotab/nationwidechildrens.org_clinical_patient_brca.735bc5ff-86d1-421a-8693-6e6f92055563.txt
+/N/u/kelgalla/Karst/brca/dataLegacyReorg/biotab/nationwidechildrens.org_clinical_drug_brca.daa8de42-c4d8-4111-88f7-4b39270d1e7e.txt
+/N/u/kelgalla/Karst/brca/dataLegacyReorg/biotab/nationwidechildrens.org_clinical_follow_up_v1.5_brca.b08beee4-28cf-4c8b-b6ee-7f6b412f82af.txt
+/N/u/kelgalla/Karst/brca/dataLegacyReorg/biotab/nationwidechildrens.org_clinical_nte_brca.eef0e647-3bc2-489c-ba50-a5c1294573e4.txt
+/N/u/kelgalla/Karst/brca/dataLegacyReorg/biotab/nationwidechildrens.org_clinical_follow_up_v4.0_nte_brca.47c3befd-4908-40ab-8bc7-515e0825e52f.txt
+/N/u/kelgalla/Karst/brca/dataLegacyReorg/biotab/nationwidechildrens.org_clinical_radiation_brca.7397daa6-2fd7-44ab-bd6c-eb14e1d4212b.txt
+/N/u/kelgalla/Karst/brca/dataLegacyReorg/biotab/nationwidechildrens.org_clinical_follow_up_v4.0_brca.23ba1fd5-e4a2-4222-ab2c-bd70dafba917.txt

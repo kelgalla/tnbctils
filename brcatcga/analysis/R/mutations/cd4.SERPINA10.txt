@@ -1,0 +1,3 @@
+Hugo_Symbol	Sample_ID	Protein_Change
+SERPINA10	TCGA-C8-A12V	p.D417V
+SERPINA10	TCGA-EW-A3U0	p.X381_splice

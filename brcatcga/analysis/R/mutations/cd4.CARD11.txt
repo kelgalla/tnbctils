@@ -1,0 +1,3 @@
+Hugo_Symbol	Sample_ID	Protein_Change
+CARD11	TCGA-BH-A0RX	p.T14M
+CARD11	TCGA-GM-A2DH	p.L941F

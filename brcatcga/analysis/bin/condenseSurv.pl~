@@ -1,0 +1,171 @@
+#/usr/bin/env perl
+#---------------------------------------------------------------------
+# FILE     : condenseSurv.pl
+# AUTHOR   : Kelly E. Craven
+# CREATED  : 2017-08-04
+# COMMENTS : read in a tab-delimited file with TCGA info, including 
+#            survival information, and summarize it for analysis by R
+#---------------------------------------------------------------------
+
+use strict;
+use warnings;
+
+use Getopt::Std;
+use List::Util qw(max min);
+
+use FindBin qw($Bin);
+use lib "$Bin/..";
+use ANALYSIS::ANALYSISShare qw();
+
+$| = 1;
+
+our ($opt_i, $opt_o);
+my $usage = "Read TCGA data file and add a status and days column to summarize the survival data\n";
+$usage .= "perl condenseSurv.pl -i tcgaFile\n";
+$usage .= "-i file    input tcga file with survival data after running extractInfo.pl\n";
+$usage .= "-o file    output tcga file with a status and days column of summarized survival data\n\n";
+
+getopts("i:o:") or die($usage);
+
+if (!$opt_i or !-e $opt_i){
+    die("condenseSurv.pl: You must have a valid input file.\n$usage");
+}
+if (!$opt_o){
+    die("condenseSurv.pl: You must specify an output file.\n$usage");
+}
+
+open(IN, "<$opt_i") or die("Counldn't open '$opt_i' for reading: ($!)\n");
+open(OUT, ">$opt_o") or die("Couldn't open '$opt_o' for writing: ($!)\n");
+
+my $header = <IN>;
+my @header = split("\t", $header);
+chomp(@header);
+push(@header, ("os_status", "os_days", "dfs_status", "dfs_days"));
+print(OUT join("\t", @header), "\n");
+my %indices = map { $header[$_], $_} (0..$#header);
+
+while (my $line = <IN>){
+    my @surv; # (censored (0) or dead(1), days)
+    my @dfs; # (censored (0) or dead/nte(1), days)
+
+    my @values = split("\t", $line);
+    chomp(@values);
+
+    my $bcode = $values[$indices{"bcr_patient_barcode"}];
+
+    my $days_to_new_tumor_event_after_initial_treatment = $values[$indices{"days_to_new_tumor_event_after_initial_treatment"}];
+    my @days_to_new_tumor_event_after_initial_treatment = split(" | ", $days_to_new_tumor_event_after_initial_treatment);
+    my $days_to_new_tumor_event_additional_surgery_procedure = $values[$indices{"days_to_new_tumor_event_additional_surgery_procedure"}];
+    my @days_to_new_tumor_event_additional_surgery_procedure = split(" | ", $days_to_new_tumor_event_additional_surgery_procedure);
+
+    # combine the 2 fields into one
+    my @days_to_new_tumor_event;
+    foreach my $i (0..$#days_to_new_tumor_event_after_initial_treatment){
+	if ($days_to_new_tumor_event_after_initial_treatment[$i] =~ /\d+/){
+	    push(@days_to_new_tumor_event, $days_to_new_tumor_event_after_initial_treatment[$i]);
+	} elsif ($days_to_new_tumor_event_additional_surgery_procedure[$i] =~ /\d+/) {
+	    push(@days_to_new_tumor_event, $days_to_new_tumor_event_additional_surgery_procedure[$i]);
+	}
+    }
+
+    my $nte;
+    if (@days_to_new_tumor_event >= 1){
+	$nte = min(@days_to_new_tumor_event);
+    }
+    if (defined($nte)){
+	@dfs = (1, $nte);
+    }
+
+    my $vital_status = $values[$indices{"vital_status"}];
+    my @vital_status = split(" | ", $vital_status);
+    my $days_to_death = $values[$indices{"days_to_death"}];
+    my @days_to_death = split(" | ", $days_to_death);
+    my $days_to_last_followup = $values[$indices{"days_to_last_followup"}];
+    my @days_to_last_followup = split(" | ", $days_to_last_followup);
+    if (@vital_status == 0){
+	# do nothing
+    } elsif (@vital_status >= 1){
+	if ($vital_status[$#vital_status] eq "Alive"){
+	    @surv = (0, $days_to_last_followup[$#days_to_last_followup]);
+	    if (@dfs == 0 || (@dfs && $dfs[0] != 1)){
+		@dfs = (0, $days_to_last_followup[$#days_to_last_followup]);
+	    }
+	} else {
+	    @surv = (1, $days_to_death[$#days_to_death]);
+	    if (@dfs == 0 || (@dfs && $dfs[0] != 1)){
+		@dfs = (1, $days_to_death[$#days_to_death]);
+	    }
+	}
+    }
+
+    my $one_five_vital_status = $values[$indices{"v1.5_vital_status"}];
+    my @one_five_vital_status = split(" | ", $one_five_vital_status);
+    my $one_five_days_to_death = $values[$indices{"v1.5_days_to_death"}];
+    my @one_five_days_to_death = split(" | ", $one_five_days_to_death);
+    my $one_five_days_to_last_followup = $values[$indices{"v1.5_days_to_last_followup"}];
+    my @one_five_days_to_last_followup = split(" | ", $one_five_days_to_last_followup);
+    if (@one_five_vital_status == 0){
+	# do nothing
+    } elsif (@one_five_vital_status >= 1){
+	if ($one_five_vital_status[$#one_five_vital_status] eq "Alive"){
+	    @surv = (0, $one_five_days_to_last_followup[$#one_five_days_to_last_followup]);
+	    if (@dfs == 0 || (@dfs && $dfs[0] != 1)){
+		@dfs = (0, $one_five_days_to_last_followup[$#one_five_days_to_last_followup]);
+	    }
+	} else {
+	    @surv = (1, $one_five_days_to_death[$#one_five_days_to_death]);
+	    if (@dfs == 0 || (@dfs && $dfs[0] != 1)){
+		@dfs = (1, $one_five_days_to_death[$#one_five_days_to_death]);
+	    }
+	}
+    }
+
+    my $two_one_vital_status = $values[$indices{"v2.1_vital_status"}];
+    my @two_one_vital_status = split(" | ", $two_one_vital_status);
+    my $two_one_days_to_death = $values[$indices{"v2.1_days_to_death"}];
+    my @two_one_days_to_death = split(" | ", $two_one_days_to_death);
+    my $two_one_days_to_last_followup = $values[$indices{"v2.1_days_to_last_followup"}];
+    my @two_one_days_to_last_followup = split(" | ", $two_one_days_to_last_followup);
+    if (@two_one_vital_status == 0){
+	# do nothing
+    } elsif (@two_one_vital_status >= 1){
+	if ($two_one_vital_status[$#two_one_vital_status] eq "Alive"){
+	    @surv = (0, $two_one_days_to_last_followup[$#two_one_days_to_last_followup]);
+	    if (@dfs == 0 || (@dfs && $dfs[0] != 1)){
+		@dfs = (0, $two_one_days_to_last_followup[$#two_one_days_to_last_followup]);
+	    }
+	} else {
+	    @surv = (1, $two_one_days_to_death[$#two_one_days_to_death]);
+	    if (@dfs == 0 || (@dfs && $dfs[0] != 1)){
+		@dfs = (1, $two_one_days_to_death[$#two_one_days_to_death]);
+	    }
+	}
+    }
+
+    my $four_zero_vital_status = $values[$indices{"v4.0_vital_status"}];
+    my @four_zero_vital_status = split(" | ", $four_zero_vital_status);
+    my $four_zero_days_to_death = $values[$indices{"v4.0_days_to_death"}];
+    my @four_zero_days_to_death = split(" | ", $four_zero_days_to_death);
+    my $four_zero_days_to_last_followup = $values[$indices{"v4.0_days_to_last_followup"}];
+    my @four_zero_days_to_last_followup = split(" | ", $four_zero_days_to_last_followup);
+    if (@four_zero_vital_status == 0){
+	# do nothing
+    } elsif (@four_zero_vital_status >= 1){
+	if ($four_zero_vital_status[$#four_zero_vital_status] eq "Alive"){
+	    @surv = (0, $four_zero_days_to_last_followup[$#four_zero_days_to_last_followup]);
+	    if (@dfs == 0 || (@dfs && $dfs[0] != 1)){
+		@dfs = (0, $four_zero_days_to_last_followup[$#four_zero_days_to_last_followup]);
+	    }
+	} else {
+	    @surv = (1, $four_zero_days_to_death[$#four_zero_days_to_death]);
+	    if (@dfs == 0 || (@dfs && $dfs[0] != 1)){
+		@dfs = (1, $four_zero_days_to_death[$#four_zero_days_to_death]);
+	    }
+	}
+    }
+
+    push(@values, @surv, @dfs);
+    print(OUT join("\t", @values), "\n");
+}
+close(OUT);
+close(IN);

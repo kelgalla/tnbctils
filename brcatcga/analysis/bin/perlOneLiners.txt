@@ -1,0 +1,2 @@
+perl -F'\t' -ane 'print($F[1] . "\n")' tnbc.tils.append.surv.idc.txt > 133tnbcCases.txt
+

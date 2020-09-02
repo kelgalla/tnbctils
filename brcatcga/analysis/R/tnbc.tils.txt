@@ -1,0 +1,158 @@
+bcr_patient_uuid	bcr_patient_barcode	tils	tils_description	breast_carcinoma_estrogen_receptor_status	er_level_cell_percentage_category	breast_carcinoma_progesterone_receptor_status	progesterone_receptor_level_cell_percent_category	lab_proc_her2_neu_immunohistochemistry_receptor_status	her2_erbb_pos_finding_cell_percent_category	her2_immunohistochemistry_level_result	lab_procedure_her2_neu_in_situ_hybrid_outcome_type
+295cf595-4a29-46a3-a0c5-e5f08f947031	TCGA-A2-A1G6			Negative		Negative		Negative		1+	
+7e1673f8-5758-4963-8804-d5e39f06205b	TCGA-C8-A12V	10-20%	peritumoral	Negative		Negative		Negative			
+9F6BE944-83DE-42AB-8738-F0022F475E61	TCGA-GI-A2C9	<1%		Negative		Negative		Negative			
+57AF5C72-0D60-4A6B-B1B4-EC6DAB90F80F	TCGA-A7-A6VV			Negative		Negative		Negative			
+0dca98b0-f43e-45b6-9a02-00092c78678c	TCGA-D8-A27H	<1%		Negative		Negative		Negative			
+f55dd73d-8c36-440b-84e5-9aae53107775	TCGA-EW-A1OW	10-20%		Negative	<10%	Negative	<10%	Negative	<10%	1+	
+3886b4fb-ba22-4a50-b11a-a6893951f170	TCGA-D8-A1XQ	1-10%		Negative		Negative	<10%	Negative		1+	
+3558dec7-eae3-4a41-a217-266c6a4535fb	TCGA-E2-A1LI	1-10%		Negative		Negative		Equivocal			Negative
+4f608829-ffc4-4527-886e-6bc764ab29f5	TCGA-BH-A0BG	20-30%		Negative		Negative		Negative			
+ebc460c2-df88-4dc0-a2c0-aca8072b75ad	TCGA-AN-A0AR	1-10%		Negative		Negative		Negative		0	
+69FC24FC-CFE2-487A-935F-1A954B30B709	TCGA-LL-A441			Negative		Negative		Negative		1+	
+b5fba77b-1f50-4e71-95b2-566afba4bdd7	TCGA-A2-A04Q	10-20%		Negative	<10%	Negative	<10%	Equivocal		2+	Negative
+6FFD1B8C-6F0B-456A-9160-E0C8021E5897	TCGA-OL-A97C			Negative		Negative					Negative
+124B693C-77DC-4FA8-B703-54E8B5054A92	TCGA-HN-A2NL	40-50%		Negative		Negative		Negative			
+1549dc64-3dab-43fc-96e9-b07d520957e1	TCGA-D8-A27F	1-10%		Negative		Negative		Negative		1+	
+3afa1e93-1df8-4e4c-aaa4-557463f4bb77	TCGA-A7-A0DA	<1%		Negative		Negative		Negative		1+	
+b094e8b2-8ece-4b36-8025-18073a8b873c	TCGA-AO-A124	1-10%		Negative	<10%	Negative	<10%	Negative	<10%	0	
+E3935CE4-64D3-4A66-BA11-D308B844B410	TCGA-E9-A5FL	1-10%		Negative		Negative		Negative			
+B8AEFC48-4A6E-4254-A57F-5F688399B582	TCGA-LL-A5YO	10-20%		Negative		Negative		Negative		1+	
+4d51159f-ab2f-40e3-a363-847c3654431e	TCGA-C8-A26Y	<1%		Negative		Negative		Negative		1+	
+aa4244a8-0454-4247-a1c3-357fd51746fa	TCGA-D8-A1JL	1-10%		Negative		Negative		Negative		1+	
+C8F39325-5382-447C-9291-A6915FC978B8	TCGA-OL-A5D7			Negative		Negative					Negative
+d2f2560c-ec80-4fea-9474-c47a2e85ea95	TCGA-AO-A0J2	10-20%	peritumoral	Negative	<10%	Negative	<10%	Equivocal	30-39%	2+	Negative
+99e32c59-aa73-43fa-88c9-399ddadb2c72	TCGA-A2-A0D2	20-30%	Hetero	Negative	<10%	Negative	<10%	Negative		0	Negative
+dfe6db17-cf45-488e-bd3c-b8433d7343ca	TCGA-AR-A0TU	10-20%		Negative		Negative		Negative		1+	
+17d9e646-6ab3-40b3-a0bc-2c834d3c3213	TCGA-AR-A0U1			Negative		Negative		Negative		1+	
+a1da9db1-db11-4f4d-a249-c738db81b87e	TCGA-AN-A0XU	10-20%		Negative		Negative		Negative			
+A82D0A57-4383-473D-B334-D13B278404B1	TCGA-OL-A5RW			Negative		Negative					Negative
+5C59028F-B8FA-4811-8314-BE3EAED5F364	TCGA-EW-A6SB	40-50%		Negative		Negative		Negative			
+a9b7d7fe-be31-4f71-afee-c1bfdf511888	TCGA-AO-A0J4	1-10%		Negative	<10%	Negative	<10%	Negative	<10%		
+58090433-D8D1-4499-A235-810C3E9D5B74	TCGA-AQ-A54N	<1%	Bad sample	Negative		Negative		Equivocal		2+	Negative
+5fd9552a-c742-4388-940d-295d1107ae00	TCGA-AR-A1AY	1-10%	peritumoral	Negative		Negative		Negative			
+71f97b63-c970-44ee-98c2-e02e663d5a40	TCGA-AR-A0U4	10-20%		Negative		Negative		Negative			
+791c5768-f0f5-4ab6-86eb-998e5c4b49e3	TCGA-E2-A1L7			Negative		Negative		Negative			
+029CE650-5E5A-4100-8596-CD94300E7EF5	TCGA-E2-A574	<1%		Negative		Negative		Equivocal	10-19%	2+	Negative
+747083ff-0703-431b-aad4-f2adff739516	TCGA-BH-A18G	<1%		Negative		Negative		Negative			
+786e8dbe-442e-4551-87b3-b4c333b04dd4	TCGA-BH-A0WA	10-20%		Negative		Negative		Negative			
+6644fd4e-d2fe-4785-a73c-0f36fcc740e2	TCGA-A1-A0SO	1-10%		Negative		Negative		Equivocal			Negative
+a5b44d66-c162-46b5-9df2-86305f0385c5	TCGA-A1-A0SK	10-20%		Negative		Negative		Negative		0	
+35BD694D-1DD2-466F-AB27-03320614B40E	TCGA-OL-A66I	1-10%		Negative		Negative					Negative
+DBF6F981-15CC-40AD-91AC-A66360405FBD	TCGA-A7-A4SE	1-10%		Negative		Negative		Negative	<10%	1+	
+6c0066e3-96df-4870-bcd3-98cda64082e9	TCGA-BH-A0E6			Negative		Negative		Equivocal		2+	Negative
+521e2140-ae5b-456f-8699-97398d009687	TCGA-EW-A1P4	1-10%		Negative	<10%	Negative	<10%	Negative	<10%		
+398FB71B-CA83-44E7-BF0D-B1CA464B0283	TCGA-OL-A6VO	<1%		Negative		Negative		Negative			Negative
+128d198e-9b22-427c-90db-3714455f3a17	TCGA-A2-A0T2	1-10%		Negative	<10%	Negative	<10%	Negative		0	
+e828455d-4680-41b2-8a1c-1582e3790d62	TCGA-BH-A0RX			Negative	<10%	Negative	<10%	Negative		1+	
+5a17dcd9-5ced-4a69-8069-23c7fd0649d1	TCGA-D8-A13Z	1-10%		Negative		Negative		Negative		1+	
+d7308344-5bab-4073-bb4f-4d8cd8d7bd17	TCGA-E2-A159			Negative		Negative					Negative
+1c40b84e-a0e3-429f-a48c-21566cf881c0	TCGA-D8-A143	40-50%		Negative		Negative		Negative		1+	
+752ad011-79e0-494f-9868-98bf6feb28f8	TCGA-E2-A14N	<1%		Negative		Negative		Negative	<10%		
+A8E7D8A4-BBF0-496B-B387-8E014CFDCEA6	TCGA-A2-A3XU	1-10%		Negative		Negative					Negative
+C72CB184-462D-4009-9CDB-848782FF8A76	TCGA-A2-A3XT	1-10%		Negative		Negative		Negative			Negative
+016caf42-4e19-4444-ab5d-6cf1e76c4afa	TCGA-AO-A128	20-30%		Negative	<10%	Negative	<10%	Negative	<10%	0	Negative
+5362CBC4-CD28-4AFD-A8AC-1A4C2C33CAD2	TCGA-B6-A409	1-10%	Bad sample	Negative	<10%	Negative	<10%	Equivocal	10-19%	1+	Negative
+9848307d-1bd5-40c1-b655-a33297aaf74f	TCGA-AR-A1AI			Negative		Negative		Equivocal		2+	Negative
+ae65baeb-6b78-492a-8c63-bb7e93e83dc2	TCGA-D8-A27M	1-10%		Negative		Negative		Negative			
+D9FD2724-7DB0-4AF3-AC14-217BDFA5203F	TCGA-AC-A2QJ	10-20%		Negative		Negative		Negative			
+1d27253f-b036-44e7-a04d-8da5bbf57419	TCGA-E2-A1LK	<1%	Bad sample	Negative		Negative		Equivocal	80-89%	2+	Negative
+3AF31FCF-AD0C-4FD9-A8E3-10F9176B5E9D	TCGA-AR-A5QQ	10-20%	peritumoral	Negative		Negative		Negative		1+	
+05506f4c-e701-4a9d-ae06-97f066aade43	TCGA-AN-A0AT	30-40%		Negative		Negative		Negative			
+AA60FA8D-C374-40E0-AF2D-B007701E67E3	TCGA-LL-A740	<1%		Negative		Negative		Equivocal		2+	Negative
+98E709E7-E195-4B37-9537-F6081AFFB609	TCGA-A7-A6VW			Negative		Negative		Negative			
+49717f75-0f2d-4e1c-9a12-f1cd7877b80a	TCGA-AN-A04D			Negative		Negative		Negative		0	
+e9f4f373-37a5-48ad-a1a0-b0d47820111a	TCGA-AO-A0J6	20-30%		Negative	<10%	Negative	<10%	Negative	<10%	0	
+4da999a0-ef41-4a0b-b1d1-446b39cc855a	TCGA-EW-A1PH	10-20%		Negative	<10%	Negative	<10%	Negative	<10%		
+5a57dc25-d252-4b22-b192-4de630d7002f	TCGA-BH-A0B9	30-40%	peritumoral	Negative		Negative		Negative	<10%	0	
+53886143-C1C6-40E9-88E6-E4E5E0271FC8	TCGA-A2-A3XX	1-10%		Negative		Negative		Negative		1+	Negative
+d3d545b3-457f-4389-821f-704cb24aff7f	TCGA-AR-A256			Negative		Negative		Negative		1+	
+dcd5e079-813a-4c1a-b320-0931468d2bbc	TCGA-D8-A1JF	1-10%		Negative		Negative		Negative		1+	
+6E6B7742-A562-490B-BB72-04A5653852E4	TCGA-GM-A2DB	10-20%		Negative	<10%	Negative	<10%	Negative		1+	Negative
+b97bf89a-7a85-4eef-ae7e-f787aead1f0a	TCGA-BH-A1FC	20-30%		Negative		Negative		Negative			
+790ff5db-b7f3-4946-aaed-305f66b1dd6a	TCGA-BH-A0AV			Negative		Negative					Negative
+9434687A-197C-4959-B6B8-9C05F1DD7F53	TCGA-B6-A3ZX	30-40%		Negative	<10%	Negative	<10%	Negative	<10%	1+	
+75B3FE55-1A63-426E-867E-2EF52F54778D	TCGA-B6-A402	1-10%		Negative	<10%	Negative	<10%	Negative	<10%	1+	
+60df7543-6da5-4c75-943b-5800c1e08234	TCGA-E2-A14X	20-30%		Negative		Negative		Negative	<10%	1+	
+12d31787-e54d-4729-ace8-9141043c92b8	TCGA-A2-A0ST			Negative		Negative					Negative
+ad18820b-a804-49c0-ba8a-86c09fa6bce2	TCGA-BH-A1F6	<1%		Negative		Negative		Negative			
+d8ecba6a-9fff-4993-a799-9a8d2aea524e	TCGA-E2-A1LH	1-10%		Negative		Negative		Negative			
+D093173F-08AB-4138-BF3C-399C45A6E163	TCGA-AR-A2LR	<1%	?ACC	Negative		Negative		Negative			
+E783E518-C1E5-4EAC-8EAF-E2D65CCD9692	TCGA-S3-AA15		No Tumor	Negative		Negative		Negative			
+cf9db1af-17f0-490e-8139-142bd704763a	TCGA-A8-A07O	10-20%		Negative		Negative		Negative		1+	Negative
+01674b2c-5cf2-478f-84a1-f69c39f47bd4	TCGA-EW-A1P7			Negative	<10%	Negative	<10%	Equivocal	10-19%	2+	Negative
+a9bb8159-32f0-454c-a946-b3286a52b9d5	TCGA-A1-A0SP	20-30%		Negative		Negative		Negative		0	
+A78B04B4-2380-4803-963E-E4E633CD69AB	TCGA-A2-A3XS	10-20%	Hetero	Negative		Negative					Negative
+6412854a-f874-469e-9d1f-8bd3ae5bd41d	TCGA-A8-A08R	1-10%	peritumoral	Negative		Negative		Negative		1+	Negative
+f0d8a1fe-e313-44f1-99cc-b965cbeeff0e	TCGA-C8-A27B	20-30%		Negative		Negative		Negative			
+97943d87-fed7-4f14-a0a7-c5bfee64c392	TCGA-D8-A1XK	10-20%		Negative		Negative		Negative			
+495f9eda-b9be-4eef-bae1-766a4bfbd68e	TCGA-AO-A12F	10-20%		Negative	<10%	Negative	<10%	Negative	<10%	1+	
+2B36853F-34D3-47C5-BA6A-E5A93233D2B1	TCGA-AC-A7VC	<1%		Negative		Negative		Negative			
+98e0b4de-52fc-4945-9bf5-11e29368f939	TCGA-AR-A1AQ			Negative		Negative		Equivocal		2+	Negative
+a855c228-a263-44df-87a0-cbc32187e3f5	TCGA-C8-A1HJ	10-20%		Negative		Negative		Negative			
+8183F0FB-2303-4D7B-BCCD-55E5031FC7DF	TCGA-AC-A6IW	20-30%		Negative	<10%	Negative	<10%	Negative			
+9d166970-07c8-4ca3-9cfa-ed0049df9ecc	TCGA-BH-A1EW			Negative		Negative		Negative			
+2a84997d-ccee-4f46-bea2-752534f26416	TCGA-E2-A1LL			Negative		Negative		Negative	<10%	1+	
+4fba3deb-db94-44b5-a0f2-a575d270779e	TCGA-E2-A14R	10-20%		Negative		Negative		Negative	<10%	1+	
+3b7b9c1e-a84c-47ed-983c-9e4b00cbf01a	TCGA-A7-A26F	>70%	Unusual Histo	Negative		Negative		Equivocal		2+	Negative
+b6633c36-7ce4-4b69-9bf6-30b64d46c66f	TCGA-A8-A07C	30-40%		Negative		Negative		Negative		1+	Negative
+f2e28af9-c40e-41c4-9e82-205cca38f26a	TCGA-EW-A1P1			Negative	<10%	Negative	<10%	Equivocal	<10%	2+	Negative
+9938ce5c-e74e-446e-a932-f096f85cc3b1	TCGA-AQ-A04J	<1%	peritumoral	Negative	<10%	Negative	<10%	Negative	<10%	0	
+eda6d2d5-4199-4f76-a45b-1d0401b4e54c	TCGA-AR-A1AR	<1%	Bad sample	Negative		Negative		Negative			
+b7f74ae1-6f58-447c-be50-a7666eb19d9a	TCGA-AO-A1KR			Negative		Negative		Negative		1+	Negative
+65CAC997-4D39-4501-85EC-4FCB328A8EB5	TCGA-GM-A3XL	20-30%		Negative	<10%	Negative	<10%				Negative
+27b05b15-a44b-45ed-a6e3-e7d1ca488ea9	TCGA-A8-A09X	1-10%		Negative		Negative		Negative		1+	Negative
+67C5F371-3FA9-47C5-8B15-C2DD9ACC8519	TCGA-AC-A2QH	<1%		Negative		Negative		Negative			
+18eb4dfc-556f-4bf3-a411-4780209ed1e0	TCGA-BH-A0B3			Negative		Negative		Negative		1+	
+20e8106b-1290-4735-abe4-7621e08e3dc8	TCGA-BH-A0E0	10-20%		Negative		Negative		Negative		1+	
+6429C443-8AC3-407F-BB9C-66420B904BBF	TCGA-E2-A573	>70%		Negative		Negative		Equivocal	10-19%	2+	Negative
+B343BFE0-7C23-4C6A-8C84-9EE39DB2ECDA	TCGA-GM-A2DD	10-20%		Negative	<10%	Negative	<10%	Equivocal	<10%	2+	Negative
+9d95a65b-e41d-4f93-92d4-99dce29ff40d	TCGA-A7-A0CE	1-10%		Negative	<10%	Negative	<10%	Equivocal		2+	Negative
+84a88e8d-1e65-4b88-aae6-bf4c7a7e4c33	TCGA-A2-A0YE	1-10%		Negative	<10%	Negative	<10%	Negative	<10%	0	
+ac68d219-5670-4ddd-8df6-8aa7ad59e5c7	TCGA-EW-A1OV	50-60%		Negative	<10%	Negative	<10%	Negative	<10%		Negative
+ccb22ecc-6e18-44b8-ad48-6ab51314b16e	TCGA-D8-A142			Negative		Negative		Equivocal		2+	Negative
+DEBA32E4-0E68-4711-941B-3B63BD965AFB	TCGA-A2-A3XY	20-30%		Negative		Negative		Negative			Negative
+D6F7AFC0-1558-43AD-ACB1-2B5311ED2264	TCGA-GM-A2DF	1-10%		Negative	<10%	Negative	<10%	Negative		1+	Negative
+18d35983-ea6a-4b70-a209-9bef37595956	TCGA-A2-A0SX	30-40%		Negative		Negative		Negative		1+	
+b2ecbc0f-2c30-4200-8d5e-7b95424bcadb	TCGA-A7-A26I	<1%		Negative		Negative		Equivocal		2+	Negative
+3e9f93c0-aa79-4b4c-bd6c-b3325912362a	TCGA-AN-A0AL	20-30%		Negative	<10%	Negative	<10%	Negative	<10%	0	
+e0b1bcd2-1139-44b9-98b3-67bcf92bcc39	TCGA-E2-A1B6			Negative		Negative		Equivocal	10-19%	2+	Negative
+F81AC8A2-4CE6-439E-B027-1C0BFC88CEAA	TCGA-OL-A66P	20-30%		Negative		Negative					Negative
+359f12f9-5c41-48a4-85bc-fd7e307bf7d8	TCGA-EW-A1P8	10-20%		Negative	<10%	Negative	<10%	Negative	<10%		
+D9DC3B59-613D-469E-8B4F-6C5A557EB26A	TCGA-EW-A3U0	<1%		Negative		Negative		Negative			
+2DC1CEC9-925A-417F-9E21-3C2143E711B4	TCGA-BH-A42U			Negative		Negative		Negative			
+c70ee5e1-4703-4996-bb5c-f4cca0fb53ba	TCGA-AO-A129	10-20%		Negative	<10%	Negative	<10%	Negative	<10%	0	Negative
+0685edd2-ce1c-4e0e-8dda-393139af4223	TCGA-AO-A03U	1-10%	Hetero	Negative	<10%	Negative	<10%	Negative	<10%	0	Negative
+ccd4a24b-d8cc-4686-9dee-c98b0c5a8d21	TCGA-A2-A04P	1-10%		Negative	<10%	Negative	<10%				Negative
+5ed024e8-d05e-4c65-9441-eda9930ccc82	TCGA-A7-A26G			Negative		Negative		Negative			
+eb2dbb4f-66b6-4525-8323-431970f7a64e	TCGA-A2-A0CM	40-50%		Negative	<10%	Negative	<10%	Negative	<10%	0	
+0EC70E40-07DF-461D-8FF9-351240A0D454	TCGA-A7-A5ZV			Negative		Negative		Equivocal		2+	Negative
+5cbf0aea-ebb4-4005-bdd5-14ef2dc6826c	TCGA-A2-A0YM	10-20%		Negative	<10%	Negative	<10%				Negative
+fc18d029-9be2-4fa0-9aef-6d647dc55f0b	TCGA-D8-A147	10-20%		Negative		Negative		Negative			
+a6edb6ca-ae9f-4da7-8ebe-92d83d2987fb	TCGA-E2-A158	20-30%		Negative		Negative		Negative	<10%	1+	
+4ac693e9-10f3-46b3-9d46-df3af7b0d259	TCGA-E2-A150	<1%		Negative		Negative		Negative			
+6FA2A667-9C36-4526-8A58-1975E863A806	TCGA-AC-A2BK	1-10%		Negative		Negative		Negative			
+7f2a63e6-64d5-4be1-9814-e8416fc9e688	TCGA-D8-A1JG			Negative		Negative		Equivocal		2+	Negative
+96312510-c126-485d-8109-ed81844a1dc3	TCGA-AN-A0G0	10-20%	Hetero	Negative		Negative		Negative		1+	
+23C31C2E-336C-4878-A476-CF8D811B4875	TCGA-S3-AA10	40-50%		Negative		Negative		Negative		1+	
+c49e3b18-fd88-48f4-8b01-300692ceb367	TCGA-C8-A131	20-30%		Negative		Negative		Negative		1+	
+91a2f2af-e4b1-4a0b-ab20-6a36ce63c533	TCGA-E2-A1LS	1-10%	peritumoral	Negative		Negative		Negative		1+	
+ef4cbd38-bc79-4d60-a715-647edd2ebe9e	TCGA-E2-A1LG	1-10%		Negative		Negative		Equivocal	60-69%	2+	Negative
+95c53f69-0f05-4348-822a-571f3d757001	TCGA-A2-A0T0	1-10%		Negative	<10%	Negative	<10%	Negative	<10%	0	
+66FA504C-4AE4-49AC-9355-1E063776DC0D	TCGA-GM-A2DI			Negative	<10%	Negative	<10%				Negative
+E8EA576B-EB16-44F7-B241-DAEFC1375388	TCGA-A7-A6VY			Negative		Negative		Negative			
+92b5de82-0221-4df1-8094-80f40c0bb4fa	TCGA-BH-A0BL	30-40%	Hetero	Negative		Negative		Negative			
+b58ad350-5140-4fa8-bc2c-24bca8395f3a	TCGA-A2-A04T	20-30%		Negative	<10%	Negative	<10%	Equivocal		2+	Negative
+70ab4f23-23c4-409f-a5cc-18a010c3a24e	TCGA-C8-A26X	20-30%		Negative		Negative		Negative		1+	
+972447aa-4332-47e7-bddd-2eb699dbb664	TCGA-AR-A0TS	<1%	peritumoral	Negative		Negative		Negative		1+	
+5d1d00c6-fcae-479e-ae1e-de76efd41d98	TCGA-BH-A0BW			Negative		Negative					Negative
+D9A1C06F-7B50-46B0-878E-89E8C31863AE	TCGA-B6-A400	10-20%	peritumoral	Negative	<10%	Negative	<10%	Negative	<10%	1+	
+88db1340-e4bf-451a-87c0-6e9168296f5e	TCGA-EW-A1PB	1-10%		Negative	<10%	Negative	<10%	Negative	<10%		
+5700C1B3-922A-4401-8AB8-89028908D696	TCGA-GM-A2DH	20-30%		Negative	<10%	Negative	<10%	Negative		1+	Negative
+89128dba-403f-4a96-bb3b-23ed0d5e2147	TCGA-E2-A1AZ	<1%		Negative		Negative		Indeterminate			Negative
+376FFE63-EFD7-42AF-90E1-261255B28BB7	TCGA-AR-A2LH			Negative		Negative		Equivocal		2+	Negative
+C3A981C7-F148-4252-BD50-AF8A49EC0DF8	TCGA-OL-A5D6	<1%		Negative		Negative					Negative
+959FF069-8A49-4C9B-85C2-5291CAC0ACFF	TCGA-C8-A3M7			Negative		Negative		Negative			
+324bcba2-f6a4-45a6-807c-215bdffcca21	TCGA-A2-A0D0	10-20%	Hetero	Negative	<10%	Negative	<10%	Negative		0	Negative
+6b960b58-28e1-41c6-bd6e-7e669c6aa4ef	TCGA-BH-A18V	10-20%		Negative		Negative		Negative			
+8C09F413-E938-4F2E-A414-84F0E7FCFE41	TCGA-A7-A4SD			Negative		Negative		Equivocal		2+	Negative
