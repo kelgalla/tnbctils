@@ -18,7 +18,7 @@ vals <- "abs"
 rel <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
 rel$Input.Sample <- gsub("\\.", "-", rel$Input.Sample)
 
-dirSave <- "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\test\\"
+dirSave <- "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\fpkm\\"
 
 # 5 = CD8, 8 = CD4
 #cell_idx <- 3
