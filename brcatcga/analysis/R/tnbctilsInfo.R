@@ -3,20 +3,21 @@
 # AUTHOR   : Kelly E. Craven
 # CREATED  : 2019-12-20
 # COMMENTS : read in a tab-delimited file with TCGA info, including 
-#            survival information, and summarize it for table 1
+#            survival information, and summarize it for table 1, also 
+#            univariate and multivariate analysis for cell specific
 #---------------------------------------------------------------------
 
 library(survival)
 library(plyr)
 library(survminer)
 
-surFile <- "F:\\TNBC TILS\\brcatcga\\analysis\\R\\tnbc.tils.append2.surv.idc.txt"
+surFile <- "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\tnbc.tils.append2.surv.idc.txt"
 sur <- read.delim(surFile, header=T, stringsAsFactors=F, na.strings=(""))
 
 #----------------------------------
 # 133 samples
 #----------------------------------
-rel <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
+rel <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
 rel$Input.Sample <- gsub("\\.", "-", rel$Input.Sample)
 
 # 5 = CD8, 8 = CD4
@@ -25,7 +26,7 @@ cibersort <- rel[,c(1,cell_idx)]
 colnames(cibersort)[2] <- "sum"
 
 sur <- merge(sur, cibersort, by.x="bcr_patient_barcode", by.y="Input.Sample", all.x=T)
-#sur <- sur[!(is.na(sur$sum)),]
+#sur <- sur[!(is.na(sur$sum)),] # want data on 133 and not 132
 
 sur[sur$race=="ASIAN" & !is.na(sur$race),]$race <- NA
 sur$race <- factor(sur$race, levels=c(unique(sur$race)))
@@ -79,7 +80,7 @@ mean(greaterThan30$age_at_initial_pathologic_diagnosis)
 lessThan30 <- sur[sur$tils=="<30%",]
 mean(lessThan30$age_at_initial_pathologic_diagnosis)
 wilcox.test(greaterThan30$age_at_initial_pathologic_diagnosis, lessThan30$age_at_initial_pathologic_diagnosis)
-cor.test(greaterThan30$age_at_initial_pathologic_diagnosis, lessThan30$age_at_initial_pathologic_diagnosis)
+#cor.test(greaterThan30$age_at_initial_pathologic_diagnosis, lessThan30$age_at_initial_pathologic_diagnosis)
 
 count(greaterThan30, 'race')
 count(lessThan30, 'race')
@@ -129,7 +130,7 @@ summary(cox)
 #----------------------------------
 # CD8 continuous
 #----------------------------------
-rel <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
+rel <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
 rel$Input.Sample <- gsub("\\.", "-", rel$Input.Sample)
 
 # 5 = CD8, 8 = CD4
@@ -180,7 +181,7 @@ summary(cox)
 #----------------------------------
 # CD8 high and low
 #----------------------------------
-rel <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
+rel <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
 rel$Input.Sample <- gsub("\\.", "-", rel$Input.Sample)
 
 # 5 = CD8, 8 = CD4
@@ -319,7 +320,7 @@ summary(cox)
 #----------------------------------
 # CD4 continuous
 #----------------------------------
-rel <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
+rel <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
 rel$Input.Sample <- gsub("\\.", "-", rel$Input.Sample)
 
 # 5 = CD8, 8 = CD4
@@ -364,7 +365,7 @@ summary(cox)
 #----------------------------------
 # CD4 high and low
 #----------------------------------
-rel <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
+rel <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
 rel$Input.Sample <- gsub("\\.", "-", rel$Input.Sample)
 
 # 5 = CD8, 8 = CD4
@@ -526,7 +527,7 @@ plot(prop)
 #----------------------------------
 # High CD8/CD4 and Low CD8/CD4
 #----------------------------------
-clusterGrpFile <- "F:\\TNBC TILS\\brcatcga\\analysis\\R\\clusterGrp.txt"
+clusterGrpFile <- "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\clusterGrp.txt"
 clusterGrp <- read.delim(clusterGrpFile, header=T, stringsAsFactors=F)
 clusterGrp$barcode <- gsub("\\.", "-", clusterGrp$barcode)
 
@@ -642,7 +643,7 @@ summary(cox)
 #----------------------------------
 # M1 macrophage continuous
 #----------------------------------
-rel <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
+rel <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
 rel$Input.Sample <- gsub("\\.", "-", rel$Input.Sample)
 
 # 5 = CD8, 8 = CD4

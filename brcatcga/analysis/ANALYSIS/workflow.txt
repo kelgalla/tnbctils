@@ -1,15 +1,20 @@
 queryBarcode.pl
 -will take the list of uuids in data or dataLegacy and look up barcodes and sample types
 
+bin/uuidToBarcodeSampleType.txt
+bin/uuidToBarcodeSampleType.legacy.txt
+
 -run findDataType.pl to move files from data or dataLegacy to dataReorg or dataLegacyReorg
 
 -run createBiotab.pl to create a biotab file in the bin directory
+bin/biotab.txt
 
 -run biotabTNBC.R to isolate the TNBC cases and write the file to tnbc.txt in the R directory
+R/tnbc.txt
 
--run isolateTNBC.pl to just save the files associated with the 157 TNBC cases
+-run isolateTNBC.pl to just save the files associated with the 157 TNBC cases to a tnbc directory
 
--manually combined the tils info from badve to create tnbc.tils.txt in the R directory
+-manually combined the tils scoring from Dr. Badve to create tnbc.tils.txt in the R directory
 
 -run extractInfo.pl to append additional information on the tnbc.tils.txt file
 input R/tnbc.tils.txt, output R/tnbc.tils.append.txt
@@ -23,9 +28,12 @@ input R/tnbc.tils.append.surv.txt, output R/tnbc.tils.append.surv.idc.txt
 -run combineSamples.pl to create a gene expression file of the tnbc cases for cibersort
 input R/tnbc.tils.append.surv.idc.txt, output bin/tnbcGeneExp.$dataType.txt
 
+-later additional columns were appended to tnbc.tils.append.surv.idc.txt with extractInfo2.pl
+input tnbc.tils.append.surv.idc.txt output tnbc.tils.append2.surv.idc.txt
+
 -run ensemblGene.R to map the ensembl gene ids to hugo gene symbols
 input bin/tnbcGeneExp.$dataType.txt, output R/tnbcGeneExpSymbol.$dataType.txt
 
--upload R/tnbcGeneExpSymbol.$dataType.txt to CIBERSORT and run analysis
+-upload R/tnbcGeneExpSymbol.$dataType.txt to CIBERSORT and run analysis to produce output file
 
-
+R/cibersort/data/CIBERSORT.Output_Abs_fpkm.txt

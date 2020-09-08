@@ -17,10 +17,10 @@ use File::Copy;
 #use ANALYSIS::ANALYSISShare qw(uuidToBarcode);
 
 # tnbc file location
-my $tnbcFile = "/N/u/kelgalla/Karst/brca/analysis/bin/tnbcMissing.txt";
+my $tnbcFile = "/N/u/kelgalla/Karst/brca/analysis/R/tnbc.txt";
 
 # normal
-my $dataReorgDir = "/N/u/kelgalla/Karst/brca/dataReorg";
+my $dataReorgDir = "/N/u/kelgalla/Karst/brca/tnbc";
 
 # htseq
 #my $dataTypeDir = "htseq";
@@ -94,7 +94,7 @@ foreach my $bcode (keys %barcode){
 	print($bcode . ": " . scalar(@{$barcode{$bcode}}) . " files processed\n");
 	foreach my $file (@{$barcode{$bcode}}){
 	    $path = "$dataReorgDir/$dataTypeDir/$file";
-	    $newPath = "$tnbcDir/$dataTypeDir" . "Missing" . "/$file";
+	    $newPath = "$tnbcDir/$dataTypeDir/$file";
 	    copy($path, $newPath) or die "Copy failed: $!";
 	}
     } else {
