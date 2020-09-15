@@ -679,3 +679,46 @@ summary(cox)
 # cox dfs
 cox <- coxph(Surv(dfs_days, dfs_status)~sum, data=sur)
 summary(cox)
+
+#----------------------------------
+# all immune types continuous for purposes of calculating fdr
+#----------------------------------
+rel <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
+rel$Input.Sample <- gsub("\\.", "-", rel$Input.Sample)
+
+pvalTbl <- data.frame(cellType=character(), survival=character(), splitType=character(), pval=numeric())
+
+for (cell_idx in 2:(dim(rel)[2]-3)){
+  
+  cibersort <- rel[,c(1,cell_idx)]
+  cellType <- colnames(cibersort)[2]
+  colnames(cibersort)[2] <- "sum"
+  
+  surv <- merge(sur, cibersort, by.x="bcr_patient_barcode", by.y="Input.Sample", all.x=T)
+  
+  # analysis of cibersort
+  surv <- surv[!(is.na(surv$sum)),]
+ 
+  # cox os
+  cox <- coxph(Surv(os_days, os_status)~sum, data=surv)
+  summary(cox)
+  pvalue <- summary(cox)$coefficients[,5]
+  
+  comp1 <- c(cellType, "os", "continuous", pvalue)
+  pvalTbl[nrow(pvalTbl)+1,] <- comp1
+  
+  # cox dfs
+  cox <- coxph(Surv(dfs_days, dfs_status)~sum, data=surv)
+  summary(cox)
+  pvalue <- summary(cox)$coefficients[,5]
+  
+  comp2 <- c(cellType, "dfs", "continuous", pvalue)
+  pvalTbl[nrow(pvalTbl)+1,] <- comp2
+   
+}
+
+cellTblOS <- pvalTbl[pvalTbl$survival=="os",]
+cellTblOS$fdr <- p.adjust(cellTblOS$pval, method="fdr")
+
+cellTblDFS <- pvalTbl[pvalTbl$survival=="dfs",]
+cellTblDFS$fdr <- p.adjust(cellTblDFS$pval, method="fdr")

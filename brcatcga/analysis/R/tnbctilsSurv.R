@@ -20,20 +20,23 @@ rel$Input.Sample <- gsub("\\.", "-", rel$Input.Sample)
 
 dirSave <- "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\fpkm\\"
 
+pvalTbl <- data.frame(cellType=character(), survival=character(), splitType=character(), lowEnd=numeric(), 
+                      highEnd=numeric(), mean=numeric(), median=numeric(), sd=numeric(), pval=numeric())
+
 # 5 = CD8, 8 = CD4
-#cell_idx <- 3
+#cell_idx <- 2
 for (cell_idx in 2:(dim(rel)[2]-3)){
   
   cibersort <- rel[,c(1,cell_idx)]
   cellType <- colnames(cibersort)[2]
   colnames(cibersort)[2] <- "sum"
   
-  sur <- merge(sur, cibersort, by.x="bcr_patient_barcode", by.y="Input.Sample", all.x=T)
+  surv <- merge(sur, cibersort, by.x="bcr_patient_barcode", by.y="Input.Sample", all.x=T)
   
   # analysis of cibersort
-  sur <- sur[!(is.na(sur$sum)),]
+  surv <- surv[!(is.na(surv$sum)),]
   
-  x <- sur$sum
+  x <- surv$sum
   
   width <- 600
   #ratio <- 461/572
@@ -52,10 +55,10 @@ for (cell_idx in 2:(dim(rel)[2]-3)){
   dev.off()
   
   # mean +- times * sd
-  m <- mean(sur$sum, na.rm=T)
-  med <- median(sur$sum, na.rm=T)
-  sd <- sd(sur$sum, na.rm=T)
-  times <- 0.25
+  m <- mean(surv$sum, na.rm=T)
+  med <- median(surv$sum, na.rm=T)
+  sd <- sd(surv$sum, na.rm=T)
+#  times <- 0.25
   for (times in c(0.25, 0.5, 1, "mean", "median")){
     #print(paste0(cellType, " ", times))
     lowEnd <- -1
@@ -70,24 +73,35 @@ for (cell_idx in 2:(dim(rel)[2]-3)){
       lowEnd <- round(m - (as.numeric(times) * sd), digits=4)
       highEnd <- round(m + (as.numeric(times) * sd), digits=4)
     }
-    if (lowEnd <= 0){ next }
+    
+    comp1 <- c(cellType, "os", times, lowEnd, highEnd, m, med, sd, NA)
+    comp2 <- c(cellType, "dfs", times, lowEnd, highEnd, m, med, sd, NA)
+    
+    if (lowEnd <= 0){ 
+      pvalTbl[nrow(pvalTbl)+1,] <- comp1
+      pvalTbl[nrow(pvalTbl)+1,] <- comp2
+      next
+      }
     
     # lowEnd, highEnd
-    sur$imm <- NA
-    sur[sur$sum < lowEnd & !is.na(sur$sum),]$imm <- paste0("<", toString(lowEnd))
-    sur[sur$sum > highEnd & !is.na(sur$sum),]$imm <- paste0(">", toString(highEnd))
-    sur <- sur[!(is.na(sur$imm)),]
-    sur$imm <- factor(sur$imm, levels=c(paste0("<", toString(lowEnd)), paste0(">", toString(highEnd))), ordered=T)
-    lowNum <- dim(sur[sur$imm==paste0("<", toString(lowEnd)),])[1]
-    highNum <- dim(sur[sur$imm==paste0(">", toString(highEnd)),])[1]
+    surv$imm <- NA
+    surv[surv$sum < lowEnd & !is.na(surv$sum),]$imm <- paste0("<", toString(lowEnd))
+    surv[surv$sum > highEnd & !is.na(surv$sum),]$imm <- paste0(">", toString(highEnd))
+    surv <- surv[!(is.na(surv$imm)),]
+    surv$imm <- factor(surv$imm, levels=c(paste0("<", toString(lowEnd)), paste0(">", toString(highEnd))), ordered=T)
+    lowNum <- dim(surv[surv$imm==paste0("<", toString(lowEnd)),])[1]
+    highNum <- dim(surv[surv$imm==paste0(">", toString(highEnd)),])[1]
     
     # km
-    smpl.surv <- Surv(sur$os_days, sur$os_status)~sur$imm
+    smpl.surv <- Surv(surv$os_days, surv$os_status)~surv$imm
     sigTest <- survdiff(smpl.surv)
     pvalue <- 1 - pchisq(sigTest$chisq, length(sigTest$n) - 1)
     smpl.fit <- survfit(smpl.surv)
     
-    if (pvalue < 0.05) {
+    comp1[9] <- pvalue
+    pvalTbl[nrow(pvalTbl)+1,] <- comp1
+
+    #if (pvalue < 0.05) {
       
       #---
       # os
@@ -127,15 +141,18 @@ for (cell_idx in 2:(dim(rel)[2]-3)){
       dev.off()
       # fancy plot
       #---
-    }
+    #}
     
     # km
-    smpl.surv <- Surv(sur$dfs_days, sur$dfs_status)~sur$imm
+    smpl.surv <- Surv(surv$dfs_days, surv$dfs_status)~surv$imm
     sigTest <- survdiff(smpl.surv)
     pvalue <- 1 - pchisq(sigTest$chisq, length(sigTest$n) - 1)
     smpl.fit <- survfit(smpl.surv)
     
-    if (pvalue < 0.05){
+    comp2[9] <- pvalue
+    pvalTbl[nrow(pvalTbl)+1,] <- comp2
+    
+    #if (pvalue < 0.05){
       
       #---
       # dfs
@@ -178,5 +195,9 @@ for (cell_idx in 2:(dim(rel)[2]-3)){
       
     }
   }
-}
 
+cellTblOS <- pvalTbl[pvalTbl$survival=="os" & pvalTbl$splitType=="0.25",]
+cellTblOS$fdr <- p.adjust(cellTblOS$pval, method="fdr")
+
+cellTblDFS <- pvalTbl[pvalTbl$survival=="dfs" & pvalTbl$splitType=="0.25",]
+cellTblDFS$fdr <- p.adjust(cellTblDFS$pval, method="fdr")
