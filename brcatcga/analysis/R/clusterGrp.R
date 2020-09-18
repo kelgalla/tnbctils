@@ -58,3 +58,19 @@ dev.off()
 
 cox <- coxph(Surv(os_days, os_status)~clusterGrp, data=sur)
 summary(cox)
+
+# os
+# calculate fdr for multiple comparisons
+# high cd8/cd4 vs. low cd8/cd4 pval 0.03688546
+# high cd8 vs. low cd8/cd4 pval 0.4707377
+# high cd4 vs. low cd8/cd4 pval 0.7617134
+
+fdr <- p.adjust(c(0.03688546, 0.4707377, 0.7617134), method="fdr")
+
+# dfs
+# calculate fdr for multiple comparisons
+# high cd8/cd4 vs. low cd8/cd4 pval 0.07916531
+# high cd8 vs. low cd8/cd4 pval 0.9739775
+# high cd4 vs. low cd8/cd4 pval 0.9112344
+
+fdr <- p.adjust(c(0.07916531, 0.9739775, 0.9112344), method="fdr")

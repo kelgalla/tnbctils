@@ -267,8 +267,14 @@ fisher.test(t)
 smpl.surv <- Surv(sur$os_days, sur$os_status)~sur$imm
 sigTest <- survdiff(smpl.surv)
 pvalue <- 1 - pchisq(sigTest$chisq, length(sigTest$n) - 1)
+survfit(smpl.surv)
 smpl.fit <- survfit(smpl.surv)
+summary(smpl.fit)
 pvalue
+
+summary(smpl.fit, times=1826.25) # 5 year survival
+summary(smpl.fit, times=2556.75) # 7 year survival
+summary(smpl.fit, times=3652.5, extend=T) # 10 year survival
 
 # cox OS
 cox <- coxph(Surv(os_days, os_status)~imm, data=sur)
@@ -455,7 +461,12 @@ smpl.surv <- Surv(sur$dfs_days, sur$dfs_status)~sur$imm
 sigTest <- survdiff(smpl.surv)
 pvalue <- 1 - pchisq(sigTest$chisq, length(sigTest$n) - 1)
 smpl.fit <- survfit(smpl.surv)
+summary(smpl.fit)
 pvalue
+
+summary(smpl.fit, times=1826.25) # 5 year survival
+summary(smpl.fit, times=2556.75) # 7 year survival
+summary(smpl.fit, times=3652.5, extend=T) # 10 year survival
 
 # cox OS
 cox <- coxph(Surv(os_days, os_status)~imm, data=sur)
@@ -588,7 +599,12 @@ smpl.surv <- Surv(sur$os_days, sur$os_status)~sur$clusterGrp
 sigTest <- survdiff(smpl.surv)
 pvalue <- 1 - pchisq(sigTest$chisq, length(sigTest$n) - 1)
 smpl.fit <- survfit(smpl.surv)
+summary(smpl.fit)
 pvalue
+
+summary(smpl.fit, times=1826.25) # 5 year survival
+summary(smpl.fit, times=2556.75) # 7 year survival
+summary(smpl.fit, times=3652.5, extend=T) # 10 year survival
 
 # cox OS
 cox <- coxph(Surv(os_days, os_status)~clusterGrp, data=sur)

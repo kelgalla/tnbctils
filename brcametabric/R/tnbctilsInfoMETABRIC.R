@@ -132,6 +132,12 @@ pvalue <- 1 - pchisq(sigTest$chisq, length(sigTest$n) - 1)
 smpl.fit <- survfit(smpl.surv)
 pvalue
 
+summary(smpl.fit, times=60) # 5 year survival
+summary(smpl.fit, times=84) # 7 year survival
+summary(smpl.fit, times=120) # 10 year survival
+summary(smpl.fit, times=180) # 15 year survival
+summary(smpl.fit, times=240) # 20 year survival
+
 # cox OS
 cox <- coxph(Surv(OS_MONTHS, OS_STATUS2)~imm, data=sur)
 summary(cox)
@@ -231,6 +237,12 @@ sigTest <- survdiff(smpl.surv)
 pvalue <- 1 - pchisq(sigTest$chisq, length(sigTest$n) - 1)
 smpl.fit <- survfit(smpl.surv)
 pvalue
+
+summary(smpl.fit, times=60) # 5 year survival
+summary(smpl.fit, times=84) # 7 year survival
+summary(smpl.fit, times=120) # 10 year survival
+summary(smpl.fit, times=180) # 15 year survival
+summary(smpl.fit, times=240) # 20 year survival
 
 # cox OS
 cox <- coxph(Surv(OS_MONTHS, OS_STATUS2)~imm, data=sur)
