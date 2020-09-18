@@ -12,8 +12,7 @@ library(dendextend)
 
 #-----------------------
 # T Cells CD8
-#cibersort <- read.delim("~/brca/brcatcga/analysis/R/CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
-cibersort <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
+cibersort <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
 
 cibersort <- cibersort[,c("Input.Sample", "T.cells.CD8")]
 #cibersort <- cibersort[order(cibersort$T.cells.CD8),]
@@ -55,8 +54,7 @@ dev.off()
 
 #-----------------------
 # T Cells CD4 Memory Activated
-#cibersort2 <- read.delim("~/brca/brcatcga/analysis/R/CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
-cibersort2 <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
+cibersort2 <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
 
 cibersort2 <- cibersort2[,c("Input.Sample", "T.cells.CD4.memory.activated")]
 cibersort2 <- cibersort2[order(cibersort2$T.cells.CD4.memory.activated),]
@@ -97,8 +95,7 @@ dev.off()
 
 #-----------------------
 # T Cells CD8 and T Cells CD4
-#cibersort <- read.delim("~/brca/brcatcga/analysis/R/CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
-cibersort <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
+cibersort <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
 
 cibersort <- cibersort[,c("Input.Sample", "T.cells.CD8", "T.cells.CD4.memory.activated")]
 cibersort <- cibersort[order(cibersort$T.cells.CD8),]
@@ -215,19 +212,10 @@ names(mycolhc) <- names(mycl)
 # 10 #EB00FFFF
 # 11 #FF0099FF
 
-width <- 1800
-#ratio <- 547/600
-ratio <- 0.9 # height/width
-height <- trunc(width*ratio)
-#png("~/brca/brcatcga/analysis/R/CIBERSORT.Output_Abs_fpkm.T.cells.CD8.T.cells.CD4.memory.activated.png", width=width, height=height, res=300)
-png("F:\\TNBC TILS\\brcatcga\\analysis\\R\\CIBERSORT.Output_Abs_fpkm.T.cells.CD8.T.cells.CD4.memory.activated.heatmapbycolorscluster.png", width=width, height=height, res=300)
-
 hm <- heatmap.2(sexprs, Rowv=hr, Colv=NULL, dendrogram="row", lwid=c(1,2),
           na.color="#D3D3D3", col=my_palette, trace="none",
           scale="none", cexRow=1, cexCol=1, labRow=NA, labCol=NA,
           density.info="none", symbreaks=T, symkey=F, key=T, margins=c(4,4), breaks=col_breaks, RowSideColors=mycolhc)
-
-dev.off()
 
 x11(height=10, width=2); 
 barplot(rep(10, max(mycl)), col=unique(mycolhc[hrclust$labels[hrclust$order]]), horiz=T, names=unique(mycl[hrclust$order]))
@@ -239,6 +227,19 @@ mycolhc2 <- mycolhc
 mycolhc2[mycl2%in%c(8, 11, 5, 4, 6, 10, 9)] <- rep("#EB00FFFF",length(mycolhc2[mycl2%in%c(8, 11, 5, 4, 6, 10, 9)]))
 mycolhc2[mycl2%in%c(7, 3)] <- rep("#00FF0AFF",length(mycolhc2[mycl2%in%c(7,3)]))
 mycolhc2[mycl2%in%c(2)] <- rep("#FF0099FF",length(mycolhc2[mycl2%in%c(2)]))
+
+width <- 1800
+#ratio <- 547/600
+ratio <- 0.9 # height/width
+height <- trunc(width*ratio)
+png("F:\\TNBC TILS\\brcatcga\\tnbctils\\analysis\\R\\CIBERSORT.Output_Abs_fpkm.T.cells.CD8.T.cells.CD4.memory.activated.heatmapbycolorscluster.png", width=width, height=height, res=300)
+
+hm <- heatmap.2(sexprs, Rowv=hr, Colv=NULL, dendrogram="row", lwid=c(1,2),
+                na.color="#D3D3D3", col=my_palette, trace="none",
+                scale="none", cexRow=1, cexCol=1, labRow=NA, labCol=NA,
+                density.info="none", symbreaks=T, symkey=F, key=T, margins=c(4,4), breaks=col_breaks, RowSideColors=mycolhc2)
+
+dev.off()
 
 # both neg, cluster 1
 clusterKeep <- c(1)
@@ -317,4 +318,4 @@ heatmap.2(sub, Rowv=hrsub, Colv=NA, dendrogram="row", lwid=c(1,2),
 clusterGrp[(clusterGrp$barcode %in% toKeep),]$clusterGrp <- "cd8upcd4down"
 nrow(clusterGrp[clusterGrp$clusterGrp=="cd8upcd4down",])
 
-write.table(clusterGrp, "F:\\TNBC TILS\\brcatcga\\analysis\\R\\clusterGrp.txt", sep="\t", row.names=F, quote=F)
+write.table(clusterGrp, "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\clusterGrp.txt", sep="\t", row.names=F, quote=F)

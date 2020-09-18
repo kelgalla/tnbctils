@@ -39,7 +39,7 @@ dirSave <- "F:\\TNBC TILS\\tnbctils\\brcametabric\\cibersort\\intensity\\"
 dirSave2 <- "F:\\TNBC TILS\\tnbctils\\brcametabric\\cibersort\\intensity\\noSig\\"
 
 pvalTbl <- data.frame(cellType=character(), survival=character(), splitType=character(), lowEnd=numeric(), 
-                      highEnd=numeric(), mean=numeric(), median=numeric(), sd=numeric(), pval=numeric())
+                      highEnd=numeric(), lowNum=numeric(), highNum=numeric(), mean=numeric(), median=numeric(), sd=numeric(), pval=numeric())
 
 # 5 = CD8, 8 = CD4
 #cell_idx <- 11
@@ -92,7 +92,7 @@ for (cell_idx in 2:(dim(rel)[2]-3)){
       highEnd <- round(m + (as.numeric(times) * sd), digits=4)
     }
     
-    comp1 <- c(cellType, "os", times, lowEnd, highEnd, m, med, sd, NA)
+    comp1 <- c(cellType, "os", times, lowEnd, highEnd, NA, NA, m, med, sd, NA)
     
     if (lowEnd <= 0){ 
       pvalTbl[nrow(pvalTbl)+1,] <- comp1
@@ -100,23 +100,27 @@ for (cell_idx in 2:(dim(rel)[2]-3)){
       }
     
     # lowEnd, highEnd
-    surv$imm <- NA
-    surv[surv$sum < lowEnd & !is.na(surv$sum),]$imm <- paste0("<", toString(lowEnd))
-    surv[surv$sum > highEnd & !is.na(surv$sum),]$imm <- paste0(">", toString(highEnd))
-    surv <- surv[!(is.na(surv$imm)),]
-    surv$imm <- factor(surv$imm, levels=c(paste0("<", toString(lowEnd)), paste0(">", toString(highEnd))), ordered=T)
-    lowNum <- dim(surv[surv$imm==paste0("<", toString(lowEnd)),])[1]
-    highNum <- dim(surv[surv$imm==paste0(">", toString(highEnd)),])[1]
+    surv2 <- surv # reset with the loop the original object before these modifications
+    surv2$imm <- NA
+    surv2[surv2$sum < lowEnd & !is.na(surv2$sum),]$imm <- paste0("<", toString(lowEnd))
+    surv2[surv2$sum > highEnd & !is.na(surv2$sum),]$imm <- paste0(">", toString(highEnd))
+    surv2 <- surv2[!(is.na(surv2$imm)),]
+    surv2$imm <- factor(surv2$imm, levels=c(paste0("<", toString(lowEnd)), paste0(">", toString(highEnd))), ordered=T)
+    lowNum <- dim(surv2[surv2$imm==paste0("<", toString(lowEnd)),])[1]
+    highNum <- dim(surv2[surv2$imm==paste0(">", toString(highEnd)),])[1]
 
-    #tmp <- surv[order(surv$PATIENT_ID), c(1,34,35)] 
+    comp1[6] <- lowNum
+    comp1[7] <- highNum
+    
+    #tmp <- surv2[order(surv2$PATIENT_ID), c(1,34,35)] 
     
     # km
-    smpl.surv <- Surv(surv$OS_MONTHS, surv$OS_STATUS2)~surv$imm
+    smpl.surv <- Surv(surv2$OS_MONTHS, surv2$OS_STATUS2)~surv2$imm
     sigTest <- survdiff(smpl.surv)
     pvalue <- 1 - pchisq(sigTest$chisq, length(sigTest$n) - 1)
     smpl.fit <- survfit(smpl.surv)
     
-    comp1[9] <- pvalue
+    comp1[11] <- pvalue
     pvalTbl[nrow(pvalTbl)+1,] <- comp1
     
     ifelse(pvalue < 0.05, save <- dirSave, save <- dirSave2)
@@ -162,6 +166,9 @@ for (cell_idx in 2:(dim(rel)[2]-3)){
     
   }
 }
+
+pvalTbl <- pvalTbl[order(pvalTbl$pval),]
+pvalTblOS <- pvalTbl[pvalTbl$survival=="os",]
 
 cellTblOS <- pvalTbl[pvalTbl$survival=="os" & pvalTbl$splitType=="0.25",]
 cellTblOS$fdr <- p.adjust(cellTblOS$pval, method="fdr")
