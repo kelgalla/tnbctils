@@ -25,7 +25,7 @@ colnames(tnbc)[colnames(tnbc)=="barcode"] <- "tnbc"
 cases <- tnbc$tnbc
 
 #--------------cd8
-tnbc <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.0.25sd.txt", header=T, stringsAsFactors=F)
+tnbc <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.0.25sd.txt", header=T, stringsAsFactors=F)
 tnbc <- tnbc[!is.na(tnbc$imm),]
 colnames(tnbc)[colnames(tnbc)=="barcode"] <- "tnbc"
 #--------------

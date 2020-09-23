@@ -8,16 +8,14 @@
 #---------------------------------------------------------------------
 
 #---- CD8 T Cells
-#tbl <- read.delim("~/brca/brcatcga/analysis/R/os.abs.T.cells.CD8.0.25sd.mutTable.txt", header=T, stringsAsFactors=F)
-tbl <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.0.25sd.mutTable.txt", header=T, stringsAsFactors=F)
-#tbl <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.mediansd.mutTable.txt", header=T, stringsAsFactors=F)
+tbl <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.0.25sd.mutTable.txt", header=T, stringsAsFactors=F)
+#tbl <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.mediansd.mutTable.txt", header=T, stringsAsFactors=F)
 
 #---- CD4 memory activated T cells
-#tbl <- read.delim("~/brca/brcatcga/analysis/R/os.abs.T.cells.CD4.memory.activated.0.25sd.mutTable.txt", header=T, stringsAsFactors=F)
-tbl <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.abs.T.cells.CD4.memory.activated.mediansd.mutTable.txt", header=T, stringsAsFactors=F)
+#tbl <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD4.memory.activated.0.25sd.mutTable.txt", header=T, stringsAsFactors=F)
+tbl <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD4.memory.activated.mediansd.mutTable.txt", header=T, stringsAsFactors=F)
 
 #---- CD8 CD4
-#tbl <- read.delim("~/brca/brcatcga/analysis/R/os.abs.T.cells.CD4.memory.activated.0.25sd.mutTable.txt", header=T, stringsAsFactors=F)
 tbl <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.clusterGrp.mutTable.txt", header=T, stringsAsFactors=F)
 
 end <- tbl[1:8453,c(1,135:143)]
@@ -62,15 +60,15 @@ goi <- end[end$pval < 0.05,]
 goi <- goi[order(goi$pval),]
 
 #------- CD8 T cells
-#write.table(goi, "~/brca/brcatcga/analysis/R/os.abs.T.cells.CD8.0.25sd.mutSigDiff.txt", sep="\t", row.names=F, quote=F)
-#write.table(goi, "F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.mediansd.mutSigDiff.txt", sep="\t", row.names=F, quote=F)
+#write.table(goi, "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.0.25sd.mutSigDiff.txt", sep="\t", row.names=F, quote=F)
+#write.table(goi, "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.mediansd.mutSigDiff.txt", sep="\t", row.names=F, quote=F)
 
 #------- CD4 memory activated T cells
-#write.table(goi, "~/brca/brcatcga/analysis/R/os.abs.T.cells.CD4.memory.activated.0.25sd.mutSigDiff.txt", sep="\t", row.names=F, quote=F)
-write.table(goi, "F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.abs.T.cells.CD4.memory.activated.mediansd.mutSigDiff.txt", sep="\t", row.names=F, quote=F)
+#write.table(goi, "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD4.memory.activated.0.25sd.mutSigDiff.txt", sep="\t", row.names=F, quote=F)
+write.table(goi, "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD4.memory.activated.mediansd.mutSigDiff.txt", sep="\t", row.names=F, quote=F)
 
 #------- CD8 CD4
-#write.table(goi, "~/brca/brcatcga/analysis/R/os.abs.T.cells.CD4.memory.activated.0.25sd.mutSigDiff.txt", sep="\t", row.names=F, quote=F)
+#write.table(goi, "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD4.memory.activated.0.25sd.mutSigDiff.txt", sep="\t", row.names=F, quote=F)
 write.table(goi, "F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.clusterGrp.mutSigDiff.txt", sep="\t", row.names=F, quote=F)
 
 mutSigDiffcd8 <- read.delim("~/brca/brcatcga/analysis/R/os.abs.T.cells.CD8.0.25sd.mutSigDiff.txt", header=T, stringsAsFactors=F)

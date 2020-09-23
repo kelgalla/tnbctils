@@ -6,24 +6,22 @@
 #            files for the purpose of generating a subtype specific mutation heatmap
 #---------------------------------------------------------------------
 
-#dir <- "~/brca/brcatcga/analysis/R"
-dir <- "F:\\TNBC TILS\\brcatcga\\analysis\\R"
+library(ggplot2)
+
+dir <- "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R"
 
 # import gene list of interest to plot
 
 #------- CD8 T cells
-#mutSigDiff <- read.delim("~/brca/brcatcga/analysis/R/os.abs.T.cells.CD8.0.25sd.mutSigDiff.txt", header=T, stringsAsFactors=F)
-mutSigDiff <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.0.25sd.mutSigDiff.txt", header=T, stringsAsFactors=F)
-#mutSigDiff <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.mediansd.mutSigDiff.txt", header=T, stringsAsFactors=F)
+mutSigDiff <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.0.25sd.mutSigDiff.txt", header=T, stringsAsFactors=F)
+#mutSigDiff <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD8.mediansd.mutSigDiff.txt", header=T, stringsAsFactors=F)
 
 #------- CD4 memory activated T cells
-#mutSigDiff <- read.delim("~/brca/brcatcga/analysis/R/os.abs.T.cells.CD4.memory.activated.0.25sd.mutSigDiff.txt", header=T, stringsAsFactors=F)
-mutSigDiff <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.abs.T.cells.CD4.memory.activated.0.25sd.mutSigDiff.txt", header=T, stringsAsFactors=F)
-#mutSigDiff <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.abs.T.cells.CD4.memory.activated.mediansd.mutSigDiff.txt", header=T, stringsAsFactors=F)
+mutSigDiff <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD4.memory.activated.0.25sd.mutSigDiff.txt", header=T, stringsAsFactors=F)
+#mutSigDiff <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.abs.T.cells.CD4.memory.activated.mediansd.mutSigDiff.txt", header=T, stringsAsFactors=F)
 
 #------- CD8 CD4
-#mutSigDiff <- read.delim("~/brca/brcatcga/analysis/R/os.abs.T.cells.CD4.memory.activated.0.25sd.mutSigDiff.txt", header=T, stringsAsFactors=F)
-mutSigDiff <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\os.clusterGrp.mutSigDiff.txt", header=T, stringsAsFactors=F)
+mutSigDiff <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\os.clusterGrp.mutSigDiff.txt", header=T, stringsAsFactors=F)
 
 genes <- mutSigDiff$Hugo_Symbol
 
@@ -48,8 +46,7 @@ colnames(pts)[colnames(pts)=="clusterGrp"] <- "imm"
 pts$barcode <- gsub("-", "\\.", pts$barcode)
 
 # import mutation count of sample for sorting
-#mutCnt <- read.delim("~/brca/brcatcga/analysis/R/mutCnt.txt", header=T, stringsAsFactors=F)
-mutCnt <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\mutCnt.txt", header=T, stringsAsFactors=F)
+mutCnt <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\mutCnt.txt", header=T, stringsAsFactors=F)
 
 # combine immune and mutation data
 mutSum <- merge(mutCnt, pts, by.x="patient", by.y="barcode")
@@ -58,8 +55,7 @@ mutSum <- mutSum[!is.na(mutSum$mutCnt),] # remove mutCnt NAs
 mutSum <- mutSum[order(mutSum$imm, mutSum$mutCnt),]
 
 # get non-summarized mutation data for graphing
-#datNew <- read.delim("~/brca/brcatcga/analysis/R/mut.txt", header=T, stringsAsFactors=F)
-datNew <- read.delim("F:\\TNBC TILS\\brcatcga\\analysis\\R\\mut.txt", header=T, stringsAsFactors=F)
+datNew <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\mut.txt", header=T, stringsAsFactors=F)
 datNew$barcode <- gsub("-", "\\.", datNew$barcode)
 datp <- datNew
 
