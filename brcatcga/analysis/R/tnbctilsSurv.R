@@ -18,7 +18,7 @@ vals <- "abs"
 rel <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
 rel$Input.Sample <- gsub("\\.", "-", rel$Input.Sample)
 
-dirSave <- "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\fpkm\\"
+dirSave <- "F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\test\\"
 
 pvalTbl <- data.frame(cellType=character(), survival=character(), splitType=character(), lowEnd=numeric(), 
                       highEnd=numeric(), lowNum=numeric(), highNum=numeric(), mean=numeric(), median=numeric(), sd=numeric(), pval=numeric())
