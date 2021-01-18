@@ -241,6 +241,31 @@ hm <- heatmap.2(sexprs, Rowv=hr, Colv=NULL, dendrogram="row", lwid=c(1,2),
 
 dev.off()
 
+#-------- create a legend to crop in later
+# bothPos #EB00FF
+# cd8upcd4down #00FF0A
+# cd4upcd8down #FF0099
+# bothNeg #FF9900
+
+width <- 1800
+#ratio <- 547/600
+ratio <- 0.9 # height/width
+height <- trunc(width*ratio)
+png("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\clusterLegend.png", width=width, height=height, res=300)
+
+plot.new()
+
+par(lend = 1)           # square line ends for the color legend
+legend(x=0.3,y=0.9,      # location of the legend on the heatmap plot
+       legend = c("High CD8/High CD4 n=33", "High CD8/Low CD4 n=18", "Low CD8/High CD4 n=23", "Low CD8/Low CD4 n=58"), # category labels
+       col = c("#EB00FF", "#00FF0A", "#FF0099", "#FF9900"),  # color key
+       lty= 1,             # line style
+       lwd = 10            # line width
+)
+
+dev.off()
+#----------
+
 # both neg, cluster 1
 clusterKeep <- c(1)
 clusterPrune <- c(3,2,7,9,10,6,4,5,11,8)

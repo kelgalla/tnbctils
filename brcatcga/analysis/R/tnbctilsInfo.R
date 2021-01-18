@@ -957,6 +957,210 @@ cox <- coxph(Surv(dfs_days, dfs_status)~quartile, data=sur)
 summary(cox)
 
 #----------------------------------
+# CD8 and CD4 nested coxph categories - not possible to do due to differing numbers between groups
+#----------------------------------
+rel <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
+rel$Input.Sample <- gsub("\\.", "-", rel$Input.Sample)
+
+# 5 = CD8, 8 = CD4
+cell_idx <- 5
+cibersort <- rel[,c(1,cell_idx)]
+colnames(cibersort)[2] <- "cd8"
+
+sur <- merge(sur, cibersort, by.x="bcr_patient_barcode", by.y="Input.Sample")
+
+m <- mean(sur$cd8, na.rm=T)
+sd <- sd(sur$cd8, na.rm=T)
+times <- 0.25
+lowEnd <- round(m - (times * sd), digits=4)
+highEnd <- round(m + (times * sd), digits=4)
+
+# lowEnd, highEnd
+sur$cd8imm <- NA
+sur[sur$cd8 > highEnd & !is.na(sur$cd8),]$cd8imm <- "highcd8"
+sur[sur$cd8 < lowEnd & !is.na(sur$cd8),]$cd8imm <- "lowcd8"
+
+# 5 = CD8, 8 = CD4
+cell_idx <- 8
+cibersort <- rel[,c(1,cell_idx)]
+colnames(cibersort)[2] <- "cd4"
+
+sur <- merge(sur, cibersort, by.x="bcr_patient_barcode", by.y="Input.Sample")
+
+m <- mean(sur$cd4, na.rm=T)
+sd <- sd(sur$cd4, na.rm=T)
+times <- 0.25
+lowEnd <- round(m - (times * sd), digits=4)
+highEnd <- round(m + (times * sd), digits=4)
+
+# lowEnd, highEnd
+sur$cd4imm <- NA
+sur[sur$cd4 > highEnd & !is.na(sur$cd4),]$cd4imm <- "highcd4"
+sur[sur$cd4 < lowEnd & !is.na(sur$cd4),]$cd4imm <- "lowcd4"
+
+sur <- sur[!(is.na(sur$cd8imm)),]
+sur <- sur[!(is.na(sur$cd4imm)),]
+
+sur$cd8imm <- factor(sur$cd8imm, levels=c("lowcd8", "highcd8"), ordered=T)
+sur$cd4imm <- factor(sur$cd4imm, levels=c("lowcd4", "highcd4"), ordered=T)
+
+# covariates
+sur[sur$race=="ASIAN" & !is.na(sur$race),]$race <- NA
+sur$race <- factor(sur$race, levels=c(unique(sur$race)))
+
+sur[sur$pathologic_stage %in% c("Stage I", "Stage IA"),]$pathologic_stage <- "Stage I-II"
+sur[sur$pathologic_stage %in% c("Stage II", "Stage IIA", "Stage IIB"),]$pathologic_stage <- "Stage I-II"
+sur[sur$pathologic_stage %in% c("Stage III", "Stage IIIA", "Stage IIIB", "Stage IIIC"),]$pathologic_stage <- "Stage III-IV"
+sur$pathologic_stage <- factor(sur$pathologic_stage, levels=c("Stage I-II", "Stage III-IV"), ordered=T)
+
+sur[sur$menopause_status %in% c("Indeterminate (neither Pre or Postmenopausal)"),]$menopause_status <- NA
+sur[sur$menopause_status %in% c("Peri (6-12 months since last menstrual period)"),]$menopause_status <- NA
+sur$menopause_status <- factor(sur$menopause_status, levels=c("Pre (<6 months since LMP AND no prior bilateral ovariectomy AND not on estrogen replacement)",
+                                                              "Post (prior bilateral ovariectomy OR >12 mo since LMP with no prior hysterectomy)"), ordered=T)
+
+# km OS
+smpl.surv <- Surv(sur$os_days, sur$os_status)~sur$cd8imm
+sigTest <- survdiff(smpl.surv)
+pvalue <- 1 - pchisq(sigTest$chisq, length(sigTest$n) - 1)
+survfit(smpl.surv)
+smpl.fit <- survfit(smpl.surv)
+summary(smpl.fit)
+pvalue
+
+summary(smpl.fit, times=1826.25) # 5 year survival
+summary(smpl.fit, times=2556.75) # 7 year survival
+summary(smpl.fit, times=3652.5, extend=T) # 10 year survival
+
+# cox OS
+cox <- coxph(Surv(os_days, os_status)~cd8imm, data=sur)
+summary(cox)
+
+cox <- coxph(Surv(os_days, os_status)~age_at_initial_pathologic_diagnosis, data=sur)
+summary(cox)
+
+cox <- coxph(Surv(os_days, os_status)~race, data=sur)
+summary(cox)
+
+cox <- coxph(Surv(os_days, os_status)~pathologic_stage, data=sur)
+summary(cox)
+
+cox <- coxph(Surv(os_days, os_status)~menopause_status, data=sur)
+summary(cox)
+
+# all
+coxcd8 <- coxph(Surv(os_days, os_status)~cd8imm+pathologic_stage+age_at_initial_pathologic_diagnosis+menopause_status+race, data=sur)
+summary(coxcd8)
+
+coxcd8cd4 <- coxph(Surv(os_days, os_status)~cd8imm+cd4imm+pathologic_stage+age_at_initial_pathologic_diagnosis+menopause_status+race, data=sur)
+summary(coxcd8cd4)
+
+anova(coxcd8,coxcd8cd4)
+
+cox <- coxph(Surv(os_days, os_status)~imm+pathologic_stage+age_at_initial_pathologic_diagnosis+menopause_status, data=sur)
+summary(cox)
+
+cox <- coxph(Surv(os_days, os_status)~imm+pathologic_stage+race+age_at_initial_pathologic_diagnosis, data=sur)
+summary(cox)
+
+prop <- cox.zph(cox, transform="km", global=T)
+
+print(prop)
+plot(prop)
+
+ggforest(cox, data=sur)
+
+# km DFS
+#smpl.surv <- Surv(sur$dfs_days, sur$dfs_status)~sur$imm
+#sigTest <- survdiff(smpl.surv)
+#pvalue <- 1 - pchisq(sigTest$chisq, length(sigTest$n) - 1)
+#smpl.fit <- survfit(smpl.surv)
+#pvalue
+
+# cox DFS
+cox <- coxph(Surv(dfs_days, dfs_status)~imm, data=sur)
+summary(cox)
+
+cox <- coxph(Surv(dfs_days, dfs_status)~imm+pathologic_stage+age_at_initial_pathologic_diagnosis+menopause_status+race, data=sur)
+summary(cox)
+
+
+#----------------------------------
+# CD8 and cD4 nested coxph continuous
+#----------------------------------
+rel <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
+rel$Input.Sample <- gsub("\\.", "-", rel$Input.Sample)
+
+# 5 = CD8, 8 = CD4
+cell_idx <- 5
+cibersort <- rel[,c(1,cell_idx)]
+colnames(cibersort)[2] <- "cd8"
+
+sur <- merge(sur, cibersort, by.x="bcr_patient_barcode", by.y="Input.Sample")
+
+# 5 = CD8, 8 = CD4
+cell_idx <- 8
+cibersort <- rel[,c(1,cell_idx)]
+colnames(cibersort)[2] <- "cd4"
+
+sur <- merge(sur, cibersort, by.x="bcr_patient_barcode", by.y="Input.Sample")
+
+#covariates
+sur[sur$race=="ASIAN" & !is.na(sur$race),]$race <- NA
+sur$race <- factor(sur$race, levels=c(unique(sur$race)))
+count(sur, 'race')
+
+sur[sur$pathologic_stage %in% c("Stage I", "Stage IA"),]$pathologic_stage <- "Stage I-II"
+sur[sur$pathologic_stage %in% c("Stage II", "Stage IIA", "Stage IIB"),]$pathologic_stage <- "Stage I-II"
+sur[sur$pathologic_stage %in% c("Stage III", "Stage IIIA", "Stage IIIB", "Stage IIIC"),]$pathologic_stage <- "Stage III-IV"
+sur[sur$pathologic_stage %in% c("Stage IV"),]$pathologic_stage <- "Stage III-IV"
+sur$pathologic_stage <- factor(sur$pathologic_stage, levels=c("Stage I-II", "Stage III-IV"), ordered=T)
+count(sur, 'pathologic_stage')
+
+sur[sur$menopause_status %in% c("Indeterminate (neither Pre or Postmenopausal)"),]$menopause_status <- NA
+sur[sur$menopause_status %in% c("Peri (6-12 months since last menstrual period)"),]$menopause_status <- NA
+sur$menopause_status <- factor(sur$menopause_status, levels=c("Pre (<6 months since LMP AND no prior bilateral ovariectomy AND not on estrogen replacement)",
+                                                              "Post (prior bilateral ovariectomy OR >12 mo since LMP with no prior hysterectomy)"), ordered=T)
+count(sur, 'menopause_status')
+
+# cox os
+coxcd8 <- coxph(Surv(os_days, os_status)~cd8, data=sur)
+summary(coxcd8)
+anova(coxcd8)
+
+coxcd8cd4 <- coxph(Surv(os_days, os_status)~cd8+cd4, data=sur)
+summary(coxcd8cd4)
+anova(coxcd8, coxcd8cd4)
+
+coxcd8 <- coxph(Surv(os_days, os_status)~cd8+pathologic_stage+age_at_initial_pathologic_diagnosis+menopause_status+race, data=sur)
+summary(coxcd8)
+anova(coxcd8)
+
+ggforest(coxcd8, data=sur, refLabel="ref")
+
+coxcd8cd4 <- coxph(Surv(os_days, os_status)~cd8+cd4+pathologic_stage+age_at_initial_pathologic_diagnosis+menopause_status+race, data=sur)
+summary(coxcd8cd4)
+anova(coxcd8cd4)
+
+anova(coxcd8,coxcd8cd4)
+
+# cox dfs
+cox <- coxph(Surv(dfs_days, dfs_status)~cd8, data=sur)
+summary(cox)
+anova(cox)
+
+cox <- coxph(Surv(dfs_days, dfs_status)~cd4, data=sur)
+summary(cox)
+anova(cox)
+
+cox <- coxph(Surv(dfs_days, dfs_status)~cd4+pathologic_stage+age_at_initial_pathologic_diagnosis+menopause_status+race, data=sur)
+summary(cox)
+anova(cox)
+
+cox <- coxph(Surv(dfs_days, dfs_status)~cd4+cd8+pathologic_stage+age_at_initial_pathologic_diagnosis+menopause_status+race, data=sur)
+summary(cox)
+anova(cox)
+
+#----------------------------------
 # all immune types continuous for purposes of calculating fdr
 #----------------------------------
 rel <- read.delim("F:\\TNBC TILS\\tnbctils\\brcatcga\\analysis\\R\\cibersort\\data\\CIBERSORT.Output_Abs_fpkm.txt", header=T, stringsAsFactors=F)
